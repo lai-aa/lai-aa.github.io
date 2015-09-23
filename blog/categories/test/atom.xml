@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Test | My Octopress Blog]]></title>
+  <title><![CDATA[Category: Test | Keep exploring.]]></title>
   <link href="http://lai-aa.github.io/blog/categories/test/atom.xml" rel="self"/>
   <link href="http://lai-aa.github.io/"/>
-  <updated>2015-09-23T10:19:19+08:00</updated>
+  <updated>2015-09-23T10:55:31+08:00</updated>
   <id>http://lai-aa.github.io/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[Allie (Ai Lei)]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
