@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Keep exploring.]]></title>
-  <link href="http://lai-aa.github.io/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Distributed | Keep exploring.]]></title>
+  <link href="http://lai-aa.github.io/blog/categories/distributed/atom.xml" rel="self"/>
   <link href="http://lai-aa.github.io/"/>
   <updated>2015-09-23T18:14:27+08:00</updated>
   <id>http://lai-aa.github.io/</id>
@@ -51,15 +51,6 @@ else:
 2. Redis Master crash 掉，没有把key传输给Redis Slave<br/>
 3. HA 机制将Slave promot 为新Master <br/>
 4. Client B 向新的Master 申请和Client A 相同的锁，也会成功！</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[测试]]></title>
-    <link href="http://lai-aa.github.io/blog/2015/09/23/ce-shi/"/>
-    <updated>2015-09-23T10:18:24+08:00</updated>
-    <id>http://lai-aa.github.io/blog/2015/09/23/ce-shi</id>
-    <content type="html"><![CDATA[<p>测试</p>
 ]]></content>
   </entry>
   

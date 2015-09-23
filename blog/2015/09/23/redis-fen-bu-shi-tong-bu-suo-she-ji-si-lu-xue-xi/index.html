@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>测试 - Keep exploring.</title>
+  <title>Redis 分布式同步锁设计思路学习 - Keep exploring.</title>
   <meta name="author" content="Allie (Ai Lei)">
 
   
-  <meta name="description" content="测试
-">
+  <meta name="description" content="分布式应用开发的过程中经常会遇到同步锁的问题，例如：
+A系统部署在多台应用服务器上，同时，需要在这些服务器上配置一些crontab任务，这些crontab任务要修改数据，所以，仅在某一台服务器运行即可，这种情况下可以使用redis的同步锁机制。 from redlock import &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lai-aa.github.io/blog/2015/09/23/ce-shi/">
+  <link rel="canonical" href="http://lai-aa.github.io/blog/2015/09/23/redis-fen-bu-shi-tong-bu-suo-she-ji-si-lu-xue-xi/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Keep exploring." type="application/atom+xml">
@@ -69,7 +69,7 @@
   
   <header>
     
-      <h1 class="entry-title">测试</h1>
+      <h1 class="entry-title">Redis 分布式同步锁设计思路学习</h1>
     
     
       <p class="meta">
@@ -78,14 +78,46 @@
 
 
 
-<time class='entry-date' datetime='2015-09-23T10:18:24+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2015</span></span> <span class='time'>10:18 am</span></time>
+<time class='entry-date' datetime='2015-09-23T17:31:09+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2015</span></span> <span class='time'>5:31 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>测试</p>
+<div class="entry-content"><p>分布式应用开发的过程中经常会遇到同步锁的问题，例如：<br/>
+<strong>A系统部署在多台应用服务器上，同时，需要在这些服务器上配置一些crontab任务，这些crontab任务要修改数据，所以，仅在某一台服务器运行即可，这种情况下可以使用redis的同步锁机制。</strong></p>
+
+<pre><code>from redlock import Redlock
+
+rlm = Redlock([{"host": redis_host, "port": redis_port},])
+
+value = r.get(REDIS_KEY)
+if value == 1:
+    my_lock = rlm.lock(REDIS_KEY, 2000)
+    if not my_lock:
+        # Sorry, no permission, Do nothing
+        return
+    r.set(REDIS_KEY, 0)
+    rlm.unlock(my_lock)
+    # I got the permission, Do something
+else:
+    # Sorry, no permission, Do nothing
+    return
+</code></pre>
+
+<p>这个用法是比较常见的一种场景，但是redlock背后的同步锁机制还是值得学习一下的，它的设计思路可以参考 <a href="http://redis.io/topics/distlock">Redis Dist Lock</a>,可以看到如果要设计同步锁，需要至少考虑如下方面：<br/>
+1. 任何时刻，一个锁只能分配给一个client<br/>
+2. 死锁避免：某一个client申请了锁但是crash掉，该锁需要自动释放<br/>
+3. 高可用：只要一个Redis 主节点在，client 就能够申请和释放锁</p>
+
+<h3>尽管redis server 本身有HA 功能，设计同步锁的时候还需要额外考虑HA</h3>
+
+<p>比如，如下场景会引起问题：<br/>
+1. Client A 向Redis Master申请锁，成功<br/>
+2. Redis Master crash 掉，没有把key传输给Redis Slave<br/>
+3. HA 机制将Slave promot 为新Master <br/>
+4. Client B 向新的Master 申请和Client A 相同的锁，也会成功！</p>
 </div>
 
 
@@ -101,12 +133,12 @@
 
 
 
-<time class='entry-date' datetime='2015-09-23T10:18:24+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2015</span></span> <span class='time'>10:18 am</span></time>
+<time class='entry-date' datetime='2015-09-23T17:31:09+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2015</span></span> <span class='time'>5:31 pm</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/test/'>test</a>
+    <a class='category' href='/blog/categories/distributed/'>distributed</a>, <a class='category' href='/blog/categories/system/'>system</a>
   
 </span>
 
@@ -115,7 +147,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lai-aa.github.io/blog/2015/09/23/ce-shi/" data-via="" data-counturl="http://lai-aa.github.io/blog/2015/09/23/ce-shi/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lai-aa.github.io/blog/2015/09/23/redis-fen-bu-shi-tong-bu-suo-she-ji-si-lu-xue-xi/" data-via="" data-counturl="http://lai-aa.github.io/blog/2015/09/23/redis-fen-bu-shi-tong-bu-suo-she-ji-si-lu-xue-xi/" >Tweet</a>
   
   
   
@@ -124,8 +156,8 @@
     
     <p class="meta">
       
+        <a class="basic-alignment left" href="/blog/2015/09/23/ce-shi/" title="Previous Post: 测试">&laquo; 测试</a>
       
-        <a class="basic-alignment right" href="/blog/2015/09/23/redis-fen-bu-shi-tong-bu-suo-she-ji-si-lu-xue-xi/" title="Next Post: Redis 分布式同步锁设计思路学习">Redis 分布式同步锁设计思路学习 &raquo;</a>
       
     </p>
   </footer>
