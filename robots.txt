@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+
+Sitemap: http://lai-aa.github.io/sitemap.xml 
