@@ -4,7 +4,7 @@
   <title><![CDATA[Keep exploring.]]></title>
   <link href="http://lai-aa.github.io/atom.xml" rel="self"/>
   <link href="http://lai-aa.github.io/"/>
-  <updated>2015-10-09T18:02:50+08:00</updated>
+  <updated>2015-10-10T18:06:24+08:00</updated>
   <id>http://lai-aa.github.io/</id>
   <author>
     <name><![CDATA[Allie (Ai Lei)]]></name>
@@ -12,6 +12,22 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[设计师的生存法则]]></title>
+    <link href="http://lai-aa.github.io/blog/2015/10/10/she-ji-shi-de-sheng-cun-fa-ze/"/>
+    <updated>2015-10-10T17:58:45+08:00</updated>
+    <id>http://lai-aa.github.io/blog/2015/10/10/she-ji-shi-de-sheng-cun-fa-ze</id>
+    <content type="html"><![CDATA[<ul>
+<li>A: &ldquo;I have to survive here for a week?&rdquo;</li>
+<li>B: &ldquo;Anyone who can survive in New York can survive here.&rdquo;</li>
+</ul>
+
+
+<p>优秀的设计师不会默默无闻的埋没于任何一个地方，尤其这个信息时代。<br/>
+平庸只能说明你还不够优秀。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[工程师的执念]]></title>
