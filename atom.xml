@@ -4,7 +4,7 @@
   <title><![CDATA[Keep exploring.]]></title>
   <link href="http://lai-aa.github.io/atom.xml" rel="self"/>
   <link href="http://lai-aa.github.io/"/>
-  <updated>2015-10-10T18:06:24+08:00</updated>
+  <updated>2015-10-16T18:08:00+08:00</updated>
   <id>http://lai-aa.github.io/</id>
   <author>
     <name><![CDATA[Allie (Ai Lei)]]></name>
@@ -12,6 +12,35 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Python数据分析库 Pandas]]></title>
+    <link href="http://lai-aa.github.io/blog/2015/10/16/pythonshu-ju-fen-xi-ku-pandas/"/>
+    <updated>2015-10-16T17:43:22+08:00</updated>
+    <id>http://lai-aa.github.io/blog/2015/10/16/pythonshu-ju-fen-xi-ku-pandas</id>
+    <content type="html"><![CDATA[<p>Pandas － 这个名字不知道哪位大哥取的，初步估计是一个胖子。<br/>
+Pandas 是一个python库，用来做数据分析用的。简单看了一下，主要的应用场景应该是：<br/>
+* 有一大批格式化的数据 (少量的就算了吧，太heavy)<br/>
+* 相对复杂的分析处理（简单的用sql内置函数搞定就行了）</p>
+
+<p>那么，所谓的Pandas的分析函数大概有哪些呢？<br/>
+* 索引，查询类函数  （数据库功能）<br/>
+* 数据分析类函数  （分析用， 废话）<br/>
+* 数据分组        （数据库功能）<br/>
+* 数据合并        （数据库功能）<br/>
+* 时间函数         (数据库功能)<br/>
+* 绘图功能        （唔，略蛋疼）<br/>
+* 格式化输入输出   （Text  CSV  HDF5 &hellip;）    <br/>
+* 远程数据访问      （从 Yahoo 财经和 Google Analysis 读数据）<br/>
+* 丰富的编程接口 rpy2/R</p>
+
+<p>看得出来，使用这个库就不必担心去写那些笨重的sql脚本了，而且python 比较灵活，对数据库的二次处理也非常方便。当然，更多的应用场景是结合数据库一起玩。</p>
+
+<p>总的来说还算是一款不错的分析库，搞数据的同志们可以抽空研究一下哈。</p>
+
+<p><a href="http://pandas.pydata.org">http://pandas.pydata.org</a>  这上面有一个简短的视频介绍。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[设计师的生存法则]]></title>
