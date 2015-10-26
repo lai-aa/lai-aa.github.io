@@ -4,7 +4,7 @@
   <title><![CDATA[Keep exploring.]]></title>
   <link href="http://lai-aa.github.io/atom.xml" rel="self"/>
   <link href="http://lai-aa.github.io/"/>
-  <updated>2015-10-16T18:08:00+08:00</updated>
+  <updated>2015-10-26T18:27:42+08:00</updated>
   <id>http://lai-aa.github.io/</id>
   <author>
     <name><![CDATA[Allie (Ai Lei)]]></name>
@@ -12,6 +12,28 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Python ORM 遇到 PGSQL 的 Before Insert Trigger]]></title>
+    <link href="http://lai-aa.github.io/blog/2015/10/26/python-orm-yu-dao-pgsql-de-before-insert-trigger/"/>
+    <updated>2015-10-26T17:41:54+08:00</updated>
+    <id>http://lai-aa.github.io/blog/2015/10/26/python-orm-yu-dao-pgsql-de-before-insert-trigger</id>
+    <content type="html"><![CDATA[<p>哈哈，traceback！你是不是也遇到了？<br/>
+是因为<br/>
+* python sqlalchemy 有时候会给session 设置 expire_on_commit<br/>
+* 您的数据库表有 auto increase 的字段</p>
+
+<p>提交一条insert 的改动以后：<br/>
+* 这条记录不会马上insert 因为trigger 正在运行<br/>
+* 由于设置了 expire_on_commit, return 的 obj 需要计算 auto increase 的数值并立即返回 （此处应该喝trigger 是并发的），所以出错了</p>
+
+<p>解决方案：<br/>
+1. 扔掉ORM， 用sql 语句（土）<br/>
+2. 尝试禁用session 的expire_on_commit （没试，这样做会导致设计一致性问题）<br/>
+2. 自行计算 auto increase 的字段值并设置 （不仅土，而且危险）<br/>
+3. 禁用trigger （看来只能选1或2了 汗）</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Python数据分析库 Pandas]]></title>

@@ -9,10 +9,11 @@
   <meta name="author" content="Allie (Ai Lei)">
 
   
-  <meta name="description" content="Pandas － 这个名字不知道哪位大哥取的，初步估计是一个胖子。
-Pandas 是一个python库，用来做数据分析用的。简单看了一下，主要的应用场景应该是：
-* 有一大批格式化的数据 (少量的就算了吧，太heavy)
-* 相对复杂的分析处理（简单的用sql内置函数搞定就行了） 那么， &hellip;">
+  <meta name="description" content="哈哈，traceback！你是不是也遇到了？
+是因为
+* python sqlalchemy 有时候会给session 设置 expire_on_commit
+* 您的数据库表有 auto increase 的字段 提交一条insert 的改动以后：
+* 这条记录不会马上insert &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +69,48 @@ Pandas 是一个python库，用来做数据分析用的。简单看了一下，�
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/10/26/python-orm-yu-dao-pgsql-de-before-insert-trigger/">Python ORM 遇到 PGSQL 的 Before Insert Trigger</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-10-26T17:41:54+08:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>5:41 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>哈哈，traceback！你是不是也遇到了？<br/>
+是因为<br/>
+* python sqlalchemy 有时候会给session 设置 expire_on_commit<br/>
+* 您的数据库表有 auto increase 的字段</p>
+
+<p>提交一条insert 的改动以后：<br/>
+* 这条记录不会马上insert 因为trigger 正在运行<br/>
+* 由于设置了 expire_on_commit, return 的 obj 需要计算 auto increase 的数值并立即返回 （此处应该喝trigger 是并发的），所以出错了</p>
+
+<p>解决方案：<br/>
+1. 扔掉ORM， 用sql 语句（土）<br/>
+2. 尝试禁用session 的expire_on_commit （没试，这样做会导致设计一致性问题）<br/>
+2. 自行计算 auto increase 的字段值并设置 （不仅土，而且危险）<br/>
+3. 禁用trigger （看来只能选1或2了 汗）</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -292,6 +335,10 @@ else:
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/10/26/python-orm-yu-dao-pgsql-de-before-insert-trigger/">Python ORM 遇到 PGSQL 的 Before Insert Trigger</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/10/16/pythonshu-ju-fen-xi-ku-pandas/">Python数据分析库 Pandas</a>
       </li>
     
@@ -305,10 +352,6 @@ else:
     
       <li class="post">
         <a href="/blog/2015/09/23/redis-fen-bu-shi-tong-bu-suo-she-ji-si-lu-xue-xi/">Redis 分布式同步锁设计思路学习</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/09/23/ce-shi/">测试</a>
       </li>
     
   </ul>

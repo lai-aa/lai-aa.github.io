@@ -5,11 +5,15 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Library, - Keep exploring.</title>
+  <title>Python ORM 遇到 PGSQL 的 Before Insert Trigger - Keep exploring.</title>
   <meta name="author" content="Allie (Ai Lei)">
 
   
-  <meta name="description" content="Category: library,">
+  <meta name="description" content="哈哈，traceback！你是不是也遇到了？
+是因为
+* python sqlalchemy 有时候会给session 设置 expire_on_commit
+* 您的数据库表有 auto increase 的字段 提交一条insert 的改动以后：
+* 这条记录不会马上insert &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +22,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lai-aa.github.io/blog/categories/library/">
+  <link rel="canonical" href="http://lai-aa.github.io/blog/2015/10/26/python-orm-yu-dao-pgsql-de-before-insert-trigger/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Keep exploring." type="application/atom+xml">
@@ -64,36 +68,90 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Library,</h1>
+    
+      <h1 class="entry-title">Python ORM 遇到 PGSQL 的 Before Insert Trigger</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-10-26T17:41:54+08:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>5:41 pm</span></time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>哈哈，traceback！你是不是也遇到了？<br/>
+是因为<br/>
+* python sqlalchemy 有时候会给session 设置 expire_on_commit<br/>
+* 您的数据库表有 auto increase 的字段</p>
 
-  
-  <h2>2015</h2>
+<p>提交一条insert 的改动以后：<br/>
+* 这条记录不会马上insert 因为trigger 正在运行<br/>
+* 由于设置了 expire_on_commit, return 的 obj 需要计算 auto increase 的数值并立即返回 （此处应该喝trigger 是并发的），所以出错了</p>
 
-<article>
-  
-<h1><a href="/blog/2015/10/26/python-orm-yu-dao-pgsql-de-before-insert-trigger/">Python ORM 遇到 PGSQL 的 Before Insert Trigger</a></h1>
-<time datetime="2015-10-26T17:41:54+08:00" pubdate><span class='month'>Oct</span> <span class='day'>26</span> <span class='year'>2015</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/library/'>library,</a>, <a class='category' href='/blog/categories/python/'>python</a></span>
-</footer>
-
-
-</article>
-
+<p>解决方案：<br/>
+1. 扔掉ORM， 用sql 语句（土）<br/>
+2. 尝试禁用session 的expire_on_commit （没试，这样做会导致设计一致性问题）<br/>
+2. 自行计算 auto increase 的字段值并设置 （不仅土，而且危险）<br/>
+3. 禁用trigger （看来只能选1或2了 汗）</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Allie (Ai Lei)</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-10-26T17:41:54+08:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>5:41 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/library/'>library,</a>, <a class='category' href='/blog/categories/python/'>python</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lai-aa.github.io/blog/2015/10/26/python-orm-yu-dao-pgsql-de-before-insert-trigger/" data-via="" data-counturl="http://lai-aa.github.io/blog/2015/10/26/python-orm-yu-dao-pgsql-de-before-insert-trigger/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/10/16/pythonshu-ju-fen-xi-ku-pandas/" title="Previous Post: python数据分析库 pandas">&laquo; python数据分析库 pandas</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -148,7 +206,10 @@
       var disqus_shortname = 'lai-aa';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://lai-aa.github.io/blog/2015/10/26/python-orm-yu-dao-pgsql-de-before-insert-trigger/';
+        var disqus_url = 'http://lai-aa.github.io/blog/2015/10/26/python-orm-yu-dao-pgsql-de-before-insert-trigger/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
