@@ -4,7 +4,7 @@
   <title><![CDATA[Keep exploring.]]></title>
   <link href="http://lai-aa.github.io/atom.xml" rel="self"/>
   <link href="http://lai-aa.github.io/"/>
-  <updated>2015-10-26T18:27:42+08:00</updated>
+  <updated>2015-10-26T23:39:52+08:00</updated>
   <id>http://lai-aa.github.io/</id>
   <author>
     <name><![CDATA[Allie (Ai Lei)]]></name>
@@ -12,6 +12,44 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[轻松insert Json Into Database]]></title>
+    <link href="http://lai-aa.github.io/blog/2015/10/26/qing-song-insert-json-into-database/"/>
+    <updated>2015-10-26T23:28:34+08:00</updated>
+    <id>http://lai-aa.github.io/blog/2015/10/26/qing-song-insert-json-into-database</id>
+    <content type="html"><![CDATA[<p>大懒人时代<br/>
+自从数据库开始支持json后，好多人都迅速爱上了这个数据类型。你要问为毛？答曰这个类型易扩展。。。<br/>
+好吧，过分设计是很讨厌，且不要再次纠结于程序员审美的问题。<br/>
+当你不得不面对插入一个json object的时候，或许能够用得上如下一行代码</p>
+
+<pre><code>json.dumps(object)
+</code></pre>
+
+<p>细细把玩一番，这是int 型hash：</p>
+
+<pre><code>&gt;&gt;&gt; int_dict={1:2}      
+&gt;&gt;&gt; json.dumps(int_dict)
+'{"1": 2}'
+</code></pre>
+
+<p>这个是string型：</p>
+
+<pre><code>&gt;&gt;&gt; str_dict={'1':'2'}
+&gt;&gt;&gt; json.dumps(str_dict)
+'{"1": "2"}'
+</code></pre>
+
+<p>还有这个：</p>
+
+<pre><code>&gt;&gt;&gt; mix_dict={'1':2}
+&gt;&gt;&gt; json.dumps(mix_dict)
+'{"1": 2}'
+</code></pre>
+
+<p>全文结束，哈哈</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Python ORM 遇到 PGSQL 的 Before Insert Trigger]]></title>

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://lai-aa.github.io/blog/2015/10/26/qing-song-insert-json-into-database/</loc>
+    <lastmod>2015-10-26T23:28:34+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://lai-aa.github.io/blog/2015/10/26/python-orm-yu-dao-pgsql-de-before-insert-trigger/</loc>
     <lastmod>2015-10-26T17:41:54+08:00</lastmod>
   </url>
@@ -38,9 +42,6 @@
   </url>
   <url>
     <loc>http://lai-aa.github.io/blog/categories/life-thinking/</loc>
-  </url>
-  <url>
-    <loc>http://lai-aa.github.io/blog/categories/library/</loc>
   </url>
   <url>
     <loc>http://lai-aa.github.io/blog/categories/library/</loc>
