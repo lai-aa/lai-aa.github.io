@@ -4,7 +4,7 @@
   <title><![CDATA[Keep exploring.]]></title>
   <link href="http://lai-aa.github.io/atom.xml" rel="self"/>
   <link href="http://lai-aa.github.io/"/>
-  <updated>2015-10-26T23:39:52+08:00</updated>
+  <updated>2015-11-06T07:39:58+08:00</updated>
   <id>http://lai-aa.github.io/</id>
   <author>
     <name><![CDATA[Allie (Ai Lei)]]></name>
@@ -12,6 +12,23 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[怎样做简单和健壮的设计]]></title>
+    <link href="http://lai-aa.github.io/blog/2015/11/06/zen-yang-zuo-jian-dan-he-jian-zhuang-de-she-ji/"/>
+    <updated>2015-11-06T07:30:21+08:00</updated>
+    <id>http://lai-aa.github.io/blog/2015/11/06/zen-yang-zuo-jian-dan-he-jian-zhuang-de-she-ji</id>
+    <content type="html"><![CDATA[<ul>
+<li>做设计之初：思考，但不要思考太多，如果有可能，要尽快有简单的框架代码。然后停止。</li>
+<li>第二天上班的时候再拿过来看这段设计和代码，如果能够看得懂并且满意，那么一切ok，继续。很多情况会发现昨天的设计并不满意，那么花半天时间快速重构并继续开发。</li>
+<li>第三天上班的时候继续上述过程。</li>
+<li>如果持续一周能够将这个设计整体稳定下来，那么这个设计基本是比较简单和健壮的。</li>
+</ul>
+
+
+<h3>设计之初不要怕改，不要怕推翻，要常改，要常推翻。</h3>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[轻松insert Json Into Database]]></title>
