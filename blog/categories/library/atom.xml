@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Library | Keep exploring.]]></title>
+  <title><![CDATA[Category: Library, | Keep exploring.]]></title>
   <link href="http://lai-aa.github.io/blog/categories/library/atom.xml" rel="self"/>
   <link href="http://lai-aa.github.io/"/>
-  <updated>2015-11-09T09:00:23+08:00</updated>
+  <updated>2015-11-11T09:28:39+08:00</updated>
   <id>http://lai-aa.github.io/</id>
   <author>
     <name><![CDATA[Allie (Ai Lei)]]></name>
@@ -14,91 +14,33 @@
 
   
   <entry>
-    <title type="html"><![CDATA[轻松insert Json Into Database]]></title>
-    <link href="http://lai-aa.github.io/blog/2015/10/26/qing-song-insert-json-into-database/"/>
-    <updated>2015-10-26T23:28:34+08:00</updated>
-    <id>http://lai-aa.github.io/blog/2015/10/26/qing-song-insert-json-into-database</id>
-    <content type="html"><![CDATA[<p>大懒人时代<br/>
-自从数据库开始支持json后，好多人都迅速爱上了这个数据类型。你要问为毛？答曰这个类型易扩展。。。<br/>
-好吧，过分设计是很讨厌，且不要再次纠结于程序员审美的问题。<br/>
-当你不得不面对插入一个json object的时候，或许能够用得上如下一行代码</p>
+    <title type="html"><![CDATA[磨刀不误砍柴工之python本地开发环境]]></title>
+    <link href="http://lai-aa.github.io/blog/2015/11/10/mo-dao-bu-wu-kan-chai-gong-zhi-pythonben-di-kai-fa-huan-jing/"/>
+    <updated>2015-11-10T17:52:36+08:00</updated>
+    <id>http://lai-aa.github.io/blog/2015/11/10/mo-dao-bu-wu-kan-chai-gong-zhi-pythonben-di-kai-fa-huan-jing</id>
+    <content type="html"><![CDATA[<p>准备好开发环境总是爽的，准备好一套本地开发环境是至关重要的。如果你要提高效率和生活质量的话。<br/>
+看着一个个函数被无情的UT，代码飞速的在本地编写，内心是否有一种割草的快感呢？<br/>
+对python 道上的朋友们来说，如下工具应该非常熟悉了，对于即将入坑的朋友们，可以参考以下配置：</p>
 
-<pre><code>json.dumps(object)
-</code></pre>
+<ul>
+<li>pycharm： IDE编辑器</li>
+<li>virtualenv： 管理好你的python 开发库</li>
+<li>dotenv： 环境变量管理器</li>
+<li>boot2docker：本地跑 instance
 
-<p>细细把玩一番，这是int 型hash：</p>
+<ul>
+<li>数据库实例，如 pgsql</li>
+<li>redis实例。。。</li>
+</ul>
+</li>
+<li>pytest： UT 工具
 
-<pre><code>&gt;&gt;&gt; int_dict={1:2}      
-&gt;&gt;&gt; json.dumps(int_dict)
-'{"1": 2}'
-</code></pre>
+<ul>
+<li>如果有amazon 服务相关开发的话，moto库也必不可少，一条import，一个decorator 就搞定一个虚拟amazon 服务，使用起来非常方便</li>
+</ul>
+</li>
+</ul>
 
-<p>这个是string型：</p>
-
-<pre><code>&gt;&gt;&gt; str_dict={'1':'2'}
-&gt;&gt;&gt; json.dumps(str_dict)
-'{"1": "2"}'
-</code></pre>
-
-<p>还有这个：</p>
-
-<pre><code>&gt;&gt;&gt; mix_dict={'1':2}
-&gt;&gt;&gt; json.dumps(mix_dict)
-'{"1": 2}'
-</code></pre>
-
-<p>全文结束，哈哈</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Python ORM 遇到 PGSQL 的 Before Insert Trigger]]></title>
-    <link href="http://lai-aa.github.io/blog/2015/10/26/python-orm-yu-dao-pgsql-de-before-insert-trigger/"/>
-    <updated>2015-10-26T17:41:54+08:00</updated>
-    <id>http://lai-aa.github.io/blog/2015/10/26/python-orm-yu-dao-pgsql-de-before-insert-trigger</id>
-    <content type="html"><![CDATA[<p>哈哈，traceback！你是不是也遇到了？<br/>
-是因为<br/>
-* python sqlalchemy 有时候会给session 设置 expire_on_commit<br/>
-* 您的数据库表有 auto increase 的字段</p>
-
-<p>提交一条insert 的改动以后：<br/>
-* 这条记录不会马上insert 因为trigger 正在运行<br/>
-* 由于设置了 expire_on_commit, return 的 obj 需要计算 auto increase 的数值并立即返回 （此处应该喝trigger 是并发的），所以出错了</p>
-
-<p>解决方案：<br/>
-1. 扔掉ORM， 用sql 语句（土）<br/>
-2. 尝试禁用session 的expire_on_commit （没试，这样做会导致设计一致性问题）<br/>
-2. 自行计算 auto increase 的字段值并设置 （不仅土，而且危险）<br/>
-3. 禁用trigger （看来只能选1或2了 汗）</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Python数据分析库 Pandas]]></title>
-    <link href="http://lai-aa.github.io/blog/2015/10/16/pythonshu-ju-fen-xi-ku-pandas/"/>
-    <updated>2015-10-16T17:43:22+08:00</updated>
-    <id>http://lai-aa.github.io/blog/2015/10/16/pythonshu-ju-fen-xi-ku-pandas</id>
-    <content type="html"><![CDATA[<p>Pandas － 这个名字不知道哪位大哥取的，初步估计是一个胖子。<br/>
-Pandas 是一个python库，用来做数据分析用的。简单看了一下，主要的应用场景应该是：<br/>
-* 有一大批格式化的数据 (少量的就算了吧，太heavy)<br/>
-* 相对复杂的分析处理（简单的用sql内置函数搞定就行了）</p>
-
-<p>那么，所谓的Pandas的分析函数大概有哪些呢？<br/>
-* 索引，查询类函数  （数据库功能）<br/>
-* 数据分析类函数  （分析用， 废话）<br/>
-* 数据分组        （数据库功能）<br/>
-* 数据合并        （数据库功能）<br/>
-* 时间函数         (数据库功能)<br/>
-* 绘图功能        （唔，略蛋疼）<br/>
-* 格式化输入输出   （Text  CSV  HDF5 &hellip;）    <br/>
-* 远程数据访问      （从 Yahoo 财经和 Google Analysis 读数据）<br/>
-* 丰富的编程接口 rpy2/R</p>
-
-<p>看得出来，使用这个库就不必担心去写那些笨重的sql脚本了，而且python 比较灵活，对数据库的二次处理也非常方便。当然，更多的应用场景是结合数据库一起玩。</p>
-
-<p>总的来说还算是一款不错的分析库，搞数据的同志们可以抽空研究一下哈。</p>
-
-<p><a href="http://pandas.pydata.org">http://pandas.pydata.org</a>  这上面有一个简短的视频介绍。</p>
 ]]></content>
   </entry>
   
