@@ -4,7 +4,7 @@
   <title><![CDATA[Keep exploring.]]></title>
   <link href="http://lai-aa.github.io/atom.xml" rel="self"/>
   <link href="http://lai-aa.github.io/"/>
-  <updated>2015-11-11T09:28:39+08:00</updated>
+  <updated>2015-11-23T17:46:20+08:00</updated>
   <id>http://lai-aa.github.io/</id>
   <author>
     <name><![CDATA[Allie (Ai Lei)]]></name>
@@ -12,6 +12,60 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Flask + RQ]]></title>
+    <link href="http://lai-aa.github.io/blog/2015/11/23/flask-plus-rq/"/>
+    <updated>2015-11-23T17:29:05+08:00</updated>
+    <id>http://lai-aa.github.io/blog/2015/11/23/flask-plus-rq</id>
+    <content type="html"><![CDATA[<h3>1.Create a Queue at Flask App Level:</h3>
+
+<pre><code>import redis
+from rq import Queue
+
+redis_host = settings.get("redis_host")
+redis_port = settings.get("redis_port")
+redis_db = settings.get("redis_db")
+redis_url = "redis://{}:{}/{}".format(redis_host, redis_port, redis_db)
+redis_connection = redis.from_url(redis_url)
+redis_queue = Queue(name="my_queue", connection=redis_connection)
+
+
+...
+def create_app():
+   ...
+   app.q = redis_queue
+...
+</code></pre>
+
+<h3>2. Task Enqueue:</h3>
+
+<pre><code>app.q.enqueue(
+    "os.path.isdir", s="/tmp"
+)
+</code></pre>
+
+<h3>3.Create a exeution client somewhere(setting with burst make this working quit once the queue empty) :</h3>
+
+<pre><code>def _redis_worker(self):
+    redis_host = settings.get("redis_host")
+    redis_port = settings.get("redis_port")
+    redis_db = settings.get("redis_db")
+    redis_url = "redis://{}:{}/{}".format(redis_host, redis_port, redis_db)
+    redis_connection = redis.from_url(redis_url)
+
+    listen=['my_queue']
+    with Connection(redis_connection):
+        worker = Worker(list(map(Queue, listen)))
+        worker.work(burst=True)
+</code></pre>
+
+<h3>Can also run client with command &ldquo;rqworker&rdquo;, run help option for proper settings:</h3>
+
+<pre><code>rqworker --help
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[磨刀不误砍柴工之python本地开发环境]]></title>
