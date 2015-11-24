@@ -4,7 +4,7 @@
   <title><![CDATA[Keep exploring.]]></title>
   <link href="http://lai-aa.github.io/atom.xml" rel="self"/>
   <link href="http://lai-aa.github.io/"/>
-  <updated>2015-11-23T17:46:20+08:00</updated>
+  <updated>2015-11-24T18:06:49+08:00</updated>
   <id>http://lai-aa.github.io/</id>
   <author>
     <name><![CDATA[Allie (Ai Lei)]]></name>
@@ -12,6 +12,35 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[毫厘与千里]]></title>
+    <link href="http://lai-aa.github.io/blog/2015/11/24/hao-li-yu-qian-li/"/>
+    <updated>2015-11-24T17:30:23+08:00</updated>
+    <id>http://lai-aa.github.io/blog/2015/11/24/hao-li-yu-qian-li</id>
+    <content type="html"><![CDATA[<p>灵机一动，事情找到了一种全新的方式，彻底颠覆了传统，当然值得庆贺。<br/>
+大部分时候，还是按部就班，一点点向理想逼近。<br/>
+不要急着颠覆，或许老方法没有彻底糟透。例如：</p>
+
+<ul>
+<li><p>中国式学校教育：少一点灌输，多一点启发。少一点应试，多一点自主。</p>
+
+<ul>
+<li>反例：学校教育放的太松，会导致走另外一种极端</li>
+</ul>
+</li>
+<li><p>中国式家庭教育：少一点说教，多一点亲身示范。少一点急功近利，多一点顺其自然。</p>
+
+<ul>
+<li>反例：家庭的彻底放任和疏于管教</li>
+</ul>
+</li>
+</ul>
+
+
+<p>工程师的自我修养提升，何尝不是如此呢？多一点坚持，多一点循序渐进。少一点浮躁，少一点名目繁多。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Flask + RQ]]></title>

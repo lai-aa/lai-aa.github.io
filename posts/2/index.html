@@ -9,8 +9,8 @@
   <meta name="author" content="Allie (Ai Lei)">
 
   
-  <meta name="description" content="测试
-">
+  <meta name="description" content="分布式应用开发的过程中经常会遇到同步锁的问题，例如：
+A系统部署在多台应用服务器上，同时，需要在这些服务器上配置一些crontab任务，这些crontab任务要修改数据，所以，仅在某一台服务器运行即可，这种情况下可以使用redis的同步锁机制。 from redlock import &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,6 +85,69 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2015/09/23/redis-fen-bu-shi-tong-bu-suo-she-ji-si-lu-xue-xi/">Redis 分布式同步锁设计思路学习</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-09-23T17:31:09+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2015</span></span> <span class='time'>5:31 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>分布式应用开发的过程中经常会遇到同步锁的问题，例如：
+<strong>A系统部署在多台应用服务器上，同时，需要在这些服务器上配置一些crontab任务，这些crontab任务要修改数据，所以，仅在某一台服务器运行即可，这种情况下可以使用redis的同步锁机制。</strong></p>
+
+<pre><code>from redlock import Redlock
+
+rlm = Redlock([{"host": redis_host, "port": redis_port},])
+
+value = r.get(REDIS_KEY)
+if value == 1:
+    my_lock = rlm.lock(REDIS_KEY, 2000)
+    if not my_lock:
+        # Sorry, no permission, Do nothing
+        return
+    r.set(REDIS_KEY, 0)
+    rlm.unlock(my_lock)
+    # I got the permission, Do something
+else:
+    # Sorry, no permission, Do nothing
+    return
+</code></pre>
+
+<p>这个用法是比较常见的一种场景，但是redlock背后的同步锁机制还是值得学习一下的，它的设计思路可以参考 <a href="http://redis.io/topics/distlock">Redis Dist Lock</a>,可以看到如果要设计同步锁，需要至少考虑如下方面：
+1. 任何时刻，一个锁只能分配给一个client
+2. 死锁避免：某一个client申请了锁但是crash掉，该锁需要自动释放
+3. 高可用：只要一个Redis 主节点在，client 就能够申请和释放锁</p>
+
+<h3>尽管redis server 本身有HA 功能，设计同步锁的时候还需要额外考虑HA</h3>
+
+<p>比如，如下场景会引起问题：
+1. Client A 向Redis Master申请锁，成功
+2. Redis Master crash 掉，没有把key传输给Redis Slave
+3. HA 机制将Slave promot 为新Master
+4. Client B 向新的Master 申请和Client A 相同的锁，也会成功！</p>
+
+<p>To Be Continue&hellip;</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2015/09/23/ce-shi/">测试</a></h1>
     
     
@@ -124,6 +187,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/11/24/hao-li-yu-qian-li/">毫厘与千里</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/11/23/flask-plus-rq/">Flask + RQ</a>
       </li>
     
@@ -137,10 +204,6 @@
     
       <li class="post">
         <a href="/blog/2015/11/06/zen-yang-zuo-jian-dan-he-jian-zhuang-de-she-ji/">怎样做简单和健壮的设计</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/10/26/qing-song-insert-json-into-database/">轻松insert Json Into Database</a>
       </li>
     
   </ul>
