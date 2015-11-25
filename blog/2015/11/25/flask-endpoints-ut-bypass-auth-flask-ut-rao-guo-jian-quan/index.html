@@ -5,14 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Python数据分析库 Pandas - Keep exploring.</title>
+  <title>Flask Endpoints UT Bypass Auth - Flask UT 绕过鉴权 - Keep exploring.</title>
   <meta name="author" content="Allie (Ai Lei)">
 
   
-  <meta name="description" content="Pandas － 这个名字不知道哪位大哥取的，初步估计是一个胖子。
-Pandas 是一个python库，用来做数据分析用的。简单看了一下，主要的应用场景应该是：
-* 有一大批格式化的数据 (少量的就算了吧，太heavy)
-* 相对复杂的分析处理（简单的用sql内置函数搞定就行了） 那么， &hellip;">
+  <meta name="description" content="大部分Flask 应用的 Endpoint 都有Auth认证，用来保护应用的安全。那么单元测试的时候改如何绕过这些设置，专注于功能性的测试呢？ 对于 @login_required 保护的Endpoint： @example.route("/funny", methods=["GET"])
+@ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +19,7 @@ Pandas 是一个python库，用来做数据分析用的。简单看了一下，�
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lai-aa.github.io/blog/2015/10/16/pythonshu-ju-fen-xi-ku-pandas/">
+  <link rel="canonical" href="http://lai-aa.github.io/blog/2015/11/25/flask-endpoints-ut-bypass-auth-flask-ut-rao-guo-jian-quan/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Keep exploring." type="application/atom+xml">
@@ -84,7 +82,7 @@ Pandas 是一个python库，用来做数据分析用的。简单看了一下，�
   
   <header>
     
-      <h1 class="entry-title">Python数据分析库 Pandas</h1>
+      <h1 class="entry-title">Flask Endpoints UT Bypass Auth - Flask UT 绕过鉴权</h1>
     
     
       <p class="meta">
@@ -93,34 +91,91 @@ Pandas 是一个python库，用来做数据分析用的。简单看了一下，�
 
 
 
-<time class='entry-date' datetime='2015-10-16T17:43:22+08:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>5:43 pm</span></time>
+<time class='entry-date' datetime='2015-11-25T11:43:38+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:43 am</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Pandas － 这个名字不知道哪位大哥取的，初步估计是一个胖子。<br/>
-Pandas 是一个python库，用来做数据分析用的。简单看了一下，主要的应用场景应该是：<br/>
-* 有一大批格式化的数据 (少量的就算了吧，太heavy)<br/>
-* 相对复杂的分析处理（简单的用sql内置函数搞定就行了）</p>
+<div class="entry-content"><p>大部分Flask 应用的 Endpoint 都有Auth认证，用来保护应用的安全。那么单元测试的时候改如何绕过这些设置，专注于功能性的测试呢？</p>
 
-<p>那么，所谓的Pandas的分析函数大概有哪些呢？<br/>
-* 索引，查询类函数  （数据库功能）<br/>
-* 数据分析类函数  （分析用， 废话）<br/>
-* 数据分组        （数据库功能）<br/>
-* 数据合并        （数据库功能）<br/>
-* 时间函数         (数据库功能)<br/>
-* 绘图功能        （唔，略蛋疼）<br/>
-* 格式化输入输出   （Text  CSV  HDF5 &hellip;）    <br/>
-* 远程数据访问      （从 Yahoo 财经和 Google Analysis 读数据）<br/>
-* 丰富的编程接口 rpy2/R</p>
+<h2>对于 @login_required 保护的Endpoint：</h2>
 
-<p>看得出来，使用这个库就不必担心去写那些笨重的sql脚本了，而且python 比较灵活，对数据库的二次处理也非常方便。当然，更多的应用场景是结合数据库一起玩。</p>
+<pre><code>@example.route("/funny", methods=["GET"])
+@login_required
+def get_funny():
+    ...
+</code></pre>
 
-<p>总的来说还算是一款不错的分析库，搞数据的同志们可以抽空研究一下哈。</p>
+<p>在 conftest.py 里面设置一下测试用APP的配置即可，_login_disabled 可以忽略鉴权：</p>
 
-<p><a href="http://pandas.pydata.org">http://pandas.pydata.org</a>  这上面有一个简短的视频介绍。</p>
+<pre><code>@pytest.yield_fixture(scope='function')
+def app_example():
+    _app = example.create_app()
+    _app.config['TESTING'] = True
+    _app.login_manager.init_app(_app)
+    _app.login_manager._login_disabled = True
+
+    ctx = _app.test_request_context()
+    ctx.push()
+
+    yield _app
+
+    ctx.pop()
+</code></pre>
+
+<p>然后再测试case 里面加上:</p>
+
+<pre><code>@pytest.mark.usefixtures('app_example')
+def test_auth(self):
+    client = app_example.test_client()
+    client.post(".....")
+    assert ...
+</code></pre>
+
+<h2>对于 flask_principal 保护的Endpoint:</h2>
+
+<pre><code>from flask.ext.principal import (Permission, RoleNeed)
+permission = Permission(RoleNeed('role_string_definition'))
+...
+
+@permission.require(http_exception=401)
+def get_funny():
+    ...
+</code></pre>
+
+<p>在 conftest.py 里面设置 principal 相关的 mock：</p>
+
+<pre><code>@pytest.yield_fixture(scope="function")
+def principal():
+    mock_principal = mock.patch('flask.ext.principal.IdentityContext.can', return_value=True)
+    mock_principal.start()
+    yield mock_principal
+    #mock_principal.stop()
+
+
+@pytest.yield_fixture(scope="function")
+def identify():
+    mock_identify = mock.patch('flask.ext.principal.Identity.can', return_value=True)
+    mock_identify.start()
+    yield mock_identify
+
+
+@pytest.yield_fixture(scope="function")
+def permission():
+    mock_permission = mock.patch('flask.ext.principal.Permission.can', return_value=True)
+    mock_permission.start()
+    yield mock_permission
+</code></pre>
+
+<p>然后在测试的case里面加上这些修饰符就好了：</p>
+
+<pre><code>@pytest.mark.usefixtures('principal', 'identify', 'permission')
+def test_auth():
+</code></pre>
+
+<p>总的来说，其实就是moke 库的作用 :)</p>
 </div>
 
 
@@ -136,7 +191,7 @@ Pandas 是一个python库，用来做数据分析用的。简单看了一下，�
 
 
 
-<time class='entry-date' datetime='2015-10-16T17:43:22+08:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>5:43 pm</span></time>
+<time class='entry-date' datetime='2015-11-25T11:43:38+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:43 am</span></time>
       
 
 <span class="categories">
@@ -150,7 +205,7 @@ Pandas 是一个python库，用来做数据分析用的。简单看了一下，�
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lai-aa.github.io/blog/2015/10/16/pythonshu-ju-fen-xi-ku-pandas/" data-via="" data-counturl="http://lai-aa.github.io/blog/2015/10/16/pythonshu-ju-fen-xi-ku-pandas/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lai-aa.github.io/blog/2015/11/25/flask-endpoints-ut-bypass-auth-flask-ut-rao-guo-jian-quan/" data-via="" data-counturl="http://lai-aa.github.io/blog/2015/11/25/flask-endpoints-ut-bypass-auth-flask-ut-rao-guo-jian-quan/" >Tweet</a>
   
   
   
@@ -159,10 +214,8 @@ Pandas 是一个python库，用来做数据分析用的。简单看了一下，�
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2015/10/10/she-ji-shi-de-sheng-cun-fa-ze/" title="Previous Post: 设计师的生存法则">&laquo; 设计师的生存法则</a>
+        <a class="basic-alignment left" href="/blog/2015/11/24/hao-li-yu-qian-li/" title="Previous Post: 毫厘与千里">&laquo; 毫厘与千里</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2015/10/26/python-orm-yu-dao-pgsql-de-before-insert-trigger/" title="Next Post: Python ORM 遇到 PGSQL 的 Before Insert Trigger">Python ORM 遇到 PGSQL 的 Before Insert Trigger &raquo;</a>
       
     </p>
   </footer>
@@ -228,8 +281,8 @@ Pandas 是一个python库，用来做数据分析用的。简单看了一下，�
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://lai-aa.github.io/blog/2015/10/16/pythonshu-ju-fen-xi-ku-pandas/';
-        var disqus_url = 'http://lai-aa.github.io/blog/2015/10/16/pythonshu-ju-fen-xi-ku-pandas/';
+        var disqus_identifier = 'http://lai-aa.github.io/blog/2015/11/25/flask-endpoints-ut-bypass-auth-flask-ut-rao-guo-jian-quan/';
+        var disqus_url = 'http://lai-aa.github.io/blog/2015/11/25/flask-endpoints-ut-bypass-auth-flask-ut-rao-guo-jian-quan/';
         var disqus_script = 'embed.js';
       
     (function () {

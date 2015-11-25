@@ -4,7 +4,7 @@
   <title><![CDATA[Keep exploring.]]></title>
   <link href="http://lai-aa.github.io/atom.xml" rel="self"/>
   <link href="http://lai-aa.github.io/"/>
-  <updated>2015-11-24T18:06:49+08:00</updated>
+  <updated>2015-11-25T14:00:43+08:00</updated>
   <id>http://lai-aa.github.io/</id>
   <author>
     <name><![CDATA[Allie (Ai Lei)]]></name>
@@ -12,6 +12,92 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Flask Endpoints UT Bypass Auth - Flask UT 绕过鉴权]]></title>
+    <link href="http://lai-aa.github.io/blog/2015/11/25/flask-endpoints-ut-bypass-auth-flask-ut-rao-guo-jian-quan/"/>
+    <updated>2015-11-25T11:43:38+08:00</updated>
+    <id>http://lai-aa.github.io/blog/2015/11/25/flask-endpoints-ut-bypass-auth-flask-ut-rao-guo-jian-quan</id>
+    <content type="html"><![CDATA[<p>大部分Flask 应用的 Endpoint 都有Auth认证，用来保护应用的安全。那么单元测试的时候改如何绕过这些设置，专注于功能性的测试呢？</p>
+
+<h2>对于 @login_required 保护的Endpoint：</h2>
+
+<pre><code>@example.route("/funny", methods=["GET"])
+@login_required
+def get_funny():
+    ...
+</code></pre>
+
+<p>在 conftest.py 里面设置一下测试用APP的配置即可，_login_disabled 可以忽略鉴权：</p>
+
+<pre><code>@pytest.yield_fixture(scope='function')
+def app_example():
+    _app = example.create_app()
+    _app.config['TESTING'] = True
+    _app.login_manager.init_app(_app)
+    _app.login_manager._login_disabled = True
+
+    ctx = _app.test_request_context()
+    ctx.push()
+
+    yield _app
+
+    ctx.pop()
+</code></pre>
+
+<p>然后再测试case 里面加上:</p>
+
+<pre><code>@pytest.mark.usefixtures('app_example')
+def test_auth(self):
+    client = app_example.test_client()
+    client.post(".....")
+    assert ...
+</code></pre>
+
+<h2>对于 flask_principal 保护的Endpoint:</h2>
+
+<pre><code>from flask.ext.principal import (Permission, RoleNeed)
+permission = Permission(RoleNeed('role_string_definition'))
+...
+
+@permission.require(http_exception=401)
+def get_funny():
+    ...
+</code></pre>
+
+<p>在 conftest.py 里面设置 principal 相关的 mock：</p>
+
+<pre><code>@pytest.yield_fixture(scope="function")
+def principal():
+    mock_principal = mock.patch('flask.ext.principal.IdentityContext.can', return_value=True)
+    mock_principal.start()
+    yield mock_principal
+    #mock_principal.stop()
+
+
+@pytest.yield_fixture(scope="function")
+def identify():
+    mock_identify = mock.patch('flask.ext.principal.Identity.can', return_value=True)
+    mock_identify.start()
+    yield mock_identify
+
+
+@pytest.yield_fixture(scope="function")
+def permission():
+    mock_permission = mock.patch('flask.ext.principal.Permission.can', return_value=True)
+    mock_permission.start()
+    yield mock_permission
+</code></pre>
+
+<p>然后在测试的case里面加上这些修饰符就好了：</p>
+
+<pre><code>@pytest.mark.usefixtures('principal', 'identify', 'permission')
+def test_auth():
+</code></pre>
+
+<p>总的来说，其实就是moke 库的作用 :)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[毫厘与千里]]></title>
