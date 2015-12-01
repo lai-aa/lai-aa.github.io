@@ -4,7 +4,7 @@
   <title><![CDATA[Keep exploring.]]></title>
   <link href="http://lai-aa.github.io/atom.xml" rel="self"/>
   <link href="http://lai-aa.github.io/"/>
-  <updated>2015-11-25T14:00:43+08:00</updated>
+  <updated>2015-12-01T16:57:07+08:00</updated>
   <id>http://lai-aa.github.io/</id>
   <author>
     <name><![CDATA[Allie (Ai Lei)]]></name>
@@ -12,6 +12,18 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[带团队的三个基本]]></title>
+    <link href="http://lai-aa.github.io/blog/2015/12/01/dai-tuan-dui-de-san-ge-ji-ben/"/>
+    <updated>2015-12-01T16:42:59+08:00</updated>
+    <id>http://lai-aa.github.io/blog/2015/12/01/dai-tuan-dui-de-san-ge-ji-ben</id>
+    <content type="html"><![CDATA[<p>带一个团队做事情，如果要确保这个团队能最起码的运行起来，要确保三件事情：<br/>
+1. 目标：有清晰的目标，专注点。这个目标要被大家认可，从内心深处认可，不是强加给team 的也不是谁拍脑袋想出来的。一切和这个目标相关的任务是主要任务，否则就是次要任务。有一个“把门人”对这个目标负责，不是今天某高层安排一个任务，明天另一个项目经理安排一个。<br/>
+2. 职责：并不是事无巨细都要经过team lead 或 manager过手，有一些定义好的接口人负责定义好的职责，管理人员是随时抽查关键点的角色，不要身兼太多职能。<br/>
+3. 流程：有了职责，再有有一个清晰的流程，这样team 才能像流水一样运行起来。管理层像检查流水线一样大体抽查某一个流程或深入抓某一些环节，不需要全面监控。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Flask Endpoints UT Bypass Auth - Flask UT 绕过鉴权]]></title>

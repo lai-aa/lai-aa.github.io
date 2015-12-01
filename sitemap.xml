@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://lai-aa.github.io/blog/2015/12/01/dai-tuan-dui-de-san-ge-ji-ben/</loc>
+    <lastmod>2015-12-01T16:42:59+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://lai-aa.github.io/blog/2015/11/25/flask-endpoints-ut-bypass-auth-flask-ut-rao-guo-jian-quan/</loc>
     <lastmod>2015-11-25T11:43:38+08:00</lastmod>
   </url>
@@ -75,5 +79,8 @@
   </url>
   <url>
     <loc>http://lai-aa.github.io/blog/categories/library/</loc>
+  </url>
+  <url>
+    <loc>http://lai-aa.github.io/blog/categories/work-thinking/</loc>
   </url>
 </urlset>
