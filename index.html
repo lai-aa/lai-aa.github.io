@@ -9,8 +9,12 @@
   <meta name="author" content="Allie (Ai Lei)">
 
   
-  <meta name="description" content="带一个团队做事情，如果要确保这个团队能最起码的运行起来，要确保三件事情：
-1. 目标：有清晰的目标，专注点。这个目标要被大家认可，从内心深处认可，不是强加给team 的也不是谁拍脑袋想出来的。一切和这个目标相关的任务是主要任务，否则就是次要任务。有一个“把门人”对这个目标负责， &hellip;">
+  <meta name="description" content="cassandra 的基本概念里面有如下key： primary key
+composite key
+partition key
+cluster key 理解如下： primary key: 也叫 pk
+可以是多个column的联合，这个时候可以称作 composite key
+有时候也相当于 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +83,117 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/12/29/cassandra-concepts-keys/">Cassandra Concepts: Keys</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-29T14:49:39+08:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>2:49 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>cassandra 的基本概念里面有如下key：</p>
+
+<ul>
+<li>primary key</li>
+<li>composite key</li>
+<li>partition key</li>
+<li>cluster key</li>
+</ul>
+
+
+<p>理解如下：</p>
+
+<ul>
+<li>primary key:
+
+<ul>
+<li>也叫 pk</li>
+<li>可以是多个column的联合，这个时候可以称作 composite key</li>
+<li>有时候也相当于 partition key, 当primary key 是单个column的时候</li>
+</ul>
+</li>
+<li>partition key:
+
+<ul>
+<li>partition key 相同的所有记录都存在一个row 里面</li>
+<li>partition key 相同的所有记录都在一个paritition 里面，所以说一个row 就是一个partition</li>
+<li>partition key 负责索引partition，也就是说根据这个值能够知道这条记录存在哪个node 上的哪个分区。</li>
+</ul>
+</li>
+<li>cluster key:
+
+<ul>
+<li>负责同一个分区内的记录排序</li>
+</ul>
+</li>
+</ul>
+
+
+<p>例子1:<br/>
+primary key = parititon key = key<br/>
+没有cluster key</p>
+
+<pre><code>create table stackoverflow (
+     key text PRIMARY KEY,
+     data text      
+);
+</code></pre>
+
+<p>例子2:<br/>
+primary key = (key_part_one, key_part_two)<br/>
+partition key = key_part_one<br/>
+cluster key = key_part_two</p>
+
+<pre><code>create table stackoverflow (
+    key_part_one text,
+    key_part_two int,
+    data text,
+    PRIMARY KEY(key_part_one, key_part_two)      
+);
+</code></pre>
+
+<p>例子3:<br/>
+partition key = (k_part_one,k_part_two)<br/>
+cluster key = k_clust_one, k_clust_two, k_clust_three</p>
+
+<pre><code>create table stackoverflow (
+  k_part_one text,
+  k_part_two int,
+  k_clust_one text,
+  k_clust_two int,
+  k_clust_three uuid,
+  data text,
+  PRIMARY KEY((k_part_one,k_part_two), k_clust_one, k_clust_two, k_clust_three)      
+);
+</code></pre>
+
+<p>References:</p>
+
+<ul>
+<li><a href="http://intellidzine.blogspot.hk/2014/01/cassandra-data-modelling-primary-keys.html">http://intellidzine.blogspot.hk/2014/01/cassandra-data-modelling-primary-keys.html</a></li>
+<li><a href="http://stackoverflow.com/questions/24949676/difference-between-partition-key-composite-key-and-clustering-key-in-cassandra">http://stackoverflow.com/questions/24949676/difference-between-partition-key-composite-key-and-clustering-key-in-cassandra</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -568,55 +683,6 @@ def create_app():
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/10/16/pythonshu-ju-fen-xi-ku-pandas/">Python数据分析库 Pandas</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-10-16T17:43:22+08:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>5:43 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Pandas － 这个名字不知道哪位大哥取的，初步估计是一个胖子。<br/>
-Pandas 是一个python库，用来做数据分析用的。简单看了一下，主要的应用场景应该是：<br/>
-* 有一大批格式化的数据 (少量的就算了吧，太heavy)<br/>
-* 相对复杂的分析处理（简单的用sql内置函数搞定就行了）</p>
-
-<p>那么，所谓的Pandas的分析函数大概有哪些呢？<br/>
-* 索引，查询类函数  （数据库功能）<br/>
-* 数据分析类函数  （分析用， 废话）<br/>
-* 数据分组        （数据库功能）<br/>
-* 数据合并        （数据库功能）<br/>
-* 时间函数         (数据库功能)<br/>
-* 绘图功能        （唔，略蛋疼）<br/>
-* 格式化输入输出   （Text  CSV  HDF5 &hellip;）    <br/>
-* 远程数据访问      （从 Yahoo 财经和 Google Analysis 读数据）<br/>
-* 丰富的编程接口 rpy2/R</p>
-
-<p>看得出来，使用这个库就不必担心去写那些笨重的sql脚本了，而且python 比较灵活，对数据库的二次处理也非常方便。当然，更多的应用场景是结合数据库一起玩。</p>
-
-<p>总的来说还算是一款不错的分析库，搞数据的同志们可以抽空研究一下哈。</p>
-
-<p><a href="http://pandas.pydata.org">http://pandas.pydata.org</a>  这上面有一个简短的视频介绍。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -632,6 +698,10 @@ Pandas 是一个python库，用来做数据分析用的。简单看了一下，�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/12/29/cassandra-concepts-keys/">Cassandra Concepts: Keys</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/12/01/dai-tuan-dui-de-san-ge-ji-ben/">带团队的三个基本</a>
       </li>
     
@@ -645,10 +715,6 @@ Pandas 是一个python库，用来做数据分析用的。简单看了一下，�
     
       <li class="post">
         <a href="/blog/2015/11/23/flask-plus-rq/">Flask + RQ</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/10/mo-dao-bu-wu-kan-chai-gong-zhi-pythonben-di-kai-fa-huan-jing/">磨刀不误砍柴工之python本地开发环境</a>
       </li>
     
   </ul>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Cassandra | Keep exploring.]]></title>
+  <link href="http://lai-aa.github.io/blog/categories/cassandra/atom.xml" rel="self"/>
+  <link href="http://lai-aa.github.io/"/>
+  <updated>2015-12-29T17:11:50+08:00</updated>
+  <id>http://lai-aa.github.io/</id>
+  <author>
+    <name><![CDATA[Allie (Ai Lei)]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Cassandra Concepts: Keys]]></title>
+    <link href="http://lai-aa.github.io/blog/2015/12/29/cassandra-concepts-keys/"/>
+    <updated>2015-12-29T14:49:39+08:00</updated>
+    <id>http://lai-aa.github.io/blog/2015/12/29/cassandra-concepts-keys</id>
+    <content type="html"><![CDATA[<p>cassandra 的基本概念里面有如下key：</p>
+
+<ul>
+<li>primary key</li>
+<li>composite key</li>
+<li>partition key</li>
+<li>cluster key</li>
+</ul>
+
+
+<p>理解如下：</p>
+
+<ul>
+<li>primary key:
+
+<ul>
+<li>也叫 pk</li>
+<li>可以是多个column的联合，这个时候可以称作 composite key</li>
+<li>有时候也相当于 partition key, 当primary key 是单个column的时候</li>
+</ul>
+</li>
+<li>partition key:
+
+<ul>
+<li>partition key 相同的所有记录都存在一个row 里面</li>
+<li>partition key 相同的所有记录都在一个paritition 里面，所以说一个row 就是一个partition</li>
+<li>partition key 负责索引partition，也就是说根据这个值能够知道这条记录存在哪个node 上的哪个分区。</li>
+</ul>
+</li>
+<li>cluster key:
+
+<ul>
+<li>负责同一个分区内的记录排序</li>
+</ul>
+</li>
+</ul>
+
+
+<p>例子1:<br/>
+primary key = parititon key = key<br/>
+没有cluster key</p>
+
+<pre><code>create table stackoverflow (
+     key text PRIMARY KEY,
+     data text      
+);
+</code></pre>
+
+<p>例子2:<br/>
+primary key = (key_part_one, key_part_two)<br/>
+partition key = key_part_one<br/>
+cluster key = key_part_two</p>
+
+<pre><code>create table stackoverflow (
+    key_part_one text,
+    key_part_two int,
+    data text,
+    PRIMARY KEY(key_part_one, key_part_two)      
+);
+</code></pre>
+
+<p>例子3:<br/>
+partition key = (k_part_one,k_part_two)<br/>
+cluster key = k_clust_one, k_clust_two, k_clust_three</p>
+
+<pre><code>create table stackoverflow (
+  k_part_one text,
+  k_part_two int,
+  k_clust_one text,
+  k_clust_two int,
+  k_clust_three uuid,
+  data text,
+  PRIMARY KEY((k_part_one,k_part_two), k_clust_one, k_clust_two, k_clust_three)      
+);
+</code></pre>
+
+<p>References:</p>
+
+<ul>
+<li><a href="http://intellidzine.blogspot.hk/2014/01/cassandra-data-modelling-primary-keys.html">http://intellidzine.blogspot.hk/2014/01/cassandra-data-modelling-primary-keys.html</a></li>
+<li><a href="http://stackoverflow.com/questions/24949676/difference-between-partition-key-composite-key-and-clustering-key-in-cassandra">http://stackoverflow.com/questions/24949676/difference-between-partition-key-composite-key-and-clustering-key-in-cassandra</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
