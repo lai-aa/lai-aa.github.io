@@ -9,12 +9,9 @@
   <meta name="author" content="Allie (Ai Lei)">
 
   
-  <meta name="description" content="cassandra 的基本概念里面有如下key： primary key
-composite key
-partition key
-cluster key 理解如下： primary key: 也叫 pk
-可以是多个column的联合，这个时候可以称作 composite key
-有时候也相当于 &hellip;">
+  <meta name="description" content="一个悲催的消息是cassandra 3.0 里面目前还不支持 fetch_size，请猛戳:
+https://datastax-oss.atlassian.net/browse/PYTHON-323
+https://github.com/datastax/python-driver/pull/ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -83,6 +80,47 @@ cluster key 理解如下： primary key: 也叫 pk
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/12/29/cassandra-da-pi-liang-du-cao-zuo/">Cassandra 大批量读操作</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-29T17:13:25+08:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>5:13 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>一个悲催的消息是cassandra 3.0 里面目前还不支持 fetch_size，请猛戳:<br/>
+<a href="https://datastax-oss.atlassian.net/browse/PYTHON-323">https://datastax-oss.atlassian.net/browse/PYTHON-323</a><br/>
+<a href="https://github.com/datastax/python-driver/pull/389">https://github.com/datastax/python-driver/pull/389</a></p>
+
+<p>众所周知fetch_size 是全量读，分页（iteration）展示，那么cassandra 这种不建议全表扫描的数据库不支持 fetch_size 也是在情理之中的了。</p>
+
+<p>想要用python driver 大批量／分页读取cassandra 数据的朋友们，可以用如下体位（啊不，方式）：</p>
+
+<ul>
+<li>cassandra-driver 式：<a href="https://datastax.github.io/python-driver/query_paging.html">https://datastax.github.io/python-driver/query_paging.html</a></li>
+<li>cqlengine 式： <a href="http://cqlengine.readthedocs.org/en/latest/topics/queryset.html#token-function">http://cqlengine.readthedocs.org/en/latest/topics/queryset.html#token-function</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -641,48 +679,6 @@ def create_app():
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/10/26/python-orm-yu-dao-pgsql-de-before-insert-trigger/">Python ORM 遇到 PGSQL 的 Before Insert Trigger</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-10-26T17:41:54+08:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>5:41 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>哈哈，traceback！你是不是也遇到了？<br/>
-是因为<br/>
-* python sqlalchemy 有时候会给session 设置 expire_on_commit<br/>
-* 您的数据库表有 auto increase 的字段</p>
-
-<p>提交一条insert 的改动以后：<br/>
-* 这条记录不会马上insert 因为trigger 正在运行<br/>
-* 由于设置了 expire_on_commit, return 的 obj 需要计算 auto increase 的数值并立即返回 （此处应该喝trigger 是并发的），所以出错了</p>
-
-<p>解决方案：<br/>
-1. 扔掉ORM， 用sql 语句（土）<br/>
-2. 尝试禁用session 的expire_on_commit （没试，这样做会导致设计一致性问题）<br/>
-2. 自行计算 auto increase 的字段值并设置 （不仅土，而且危险）<br/>
-3. 禁用trigger （看来只能选1或2了 汗）</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -698,6 +694,10 @@ def create_app():
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/12/29/cassandra-da-pi-liang-du-cao-zuo/">Cassandra 大批量读操作</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/12/29/cassandra-concepts-keys/">Cassandra Concepts: Keys</a>
       </li>
     
@@ -711,10 +711,6 @@ def create_app():
     
       <li class="post">
         <a href="/blog/2015/11/24/hao-li-yu-qian-li/">毫厘与千里</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/11/23/flask-plus-rq/">Flask + RQ</a>
       </li>
     
   </ul>

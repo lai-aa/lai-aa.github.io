@@ -4,7 +4,7 @@
   <title><![CDATA[Keep exploring.]]></title>
   <link href="http://lai-aa.github.io/atom.xml" rel="self"/>
   <link href="http://lai-aa.github.io/"/>
-  <updated>2015-12-29T17:11:50+08:00</updated>
+  <updated>2015-12-29T17:23:05+08:00</updated>
   <id>http://lai-aa.github.io/</id>
   <author>
     <name><![CDATA[Allie (Ai Lei)]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Cassandra 大批量读操作]]></title>
+    <link href="http://lai-aa.github.io/blog/2015/12/29/cassandra-da-pi-liang-du-cao-zuo/"/>
+    <updated>2015-12-29T17:13:25+08:00</updated>
+    <id>http://lai-aa.github.io/blog/2015/12/29/cassandra-da-pi-liang-du-cao-zuo</id>
+    <content type="html"><![CDATA[<p>一个悲催的消息是cassandra 3.0 里面目前还不支持 fetch_size，请猛戳:<br/>
+<a href="https://datastax-oss.atlassian.net/browse/PYTHON-323">https://datastax-oss.atlassian.net/browse/PYTHON-323</a><br/>
+<a href="https://github.com/datastax/python-driver/pull/389">https://github.com/datastax/python-driver/pull/389</a></p>
+
+<p>众所周知fetch_size 是全量读，分页（iteration）展示，那么cassandra 这种不建议全表扫描的数据库不支持 fetch_size 也是在情理之中的了。</p>
+
+<p>想要用python driver 大批量／分页读取cassandra 数据的朋友们，可以用如下体位（啊不，方式）：</p>
+
+<ul>
+<li>cassandra-driver 式：<a href="https://datastax.github.io/python-driver/query_paging.html">https://datastax.github.io/python-driver/query_paging.html</a></li>
+<li>cqlengine 式： <a href="http://cqlengine.readthedocs.org/en/latest/topics/queryset.html#token-function">http://cqlengine.readthedocs.org/en/latest/topics/queryset.html#token-function</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Cassandra Concepts: Keys]]></title>
