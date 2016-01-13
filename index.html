@@ -9,9 +9,7 @@
   <meta name="author" content="Allie (Ai Lei)">
 
   
-  <meta name="description" content="一个悲催的消息是cassandra 3.0 里面目前还不支持 fetch_size，请猛戳:
-https://datastax-oss.atlassian.net/browse/PYTHON-323
-https://github.com/datastax/python-driver/pull/ &hellip;">
+  <meta name="description" content="从关系型数据库过渡到nosql的开发，如果您选用了cassandra，那么在做操作的时候要注意如下几点： 永远别忘记db 操作的 try catch：个人感觉cassandra 相比posgresql 来讲，出错的概率要大一些，不管是 db的 读还是写。当然，出错概率这也可能与实际应用的数据并发量 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +78,44 @@ https://github.com/datastax/python-driver/pull/ &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/01/13/cassandra-cha-xun-zhu-yi-er-san-shi/">Cassandra 数据库操作注意二三事</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-01-13T13:55:37+08:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>1:55 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>从关系型数据库过渡到nosql的开发，如果您选用了cassandra，那么在做操作的时候要注意如下几点：</p>
+
+<ul>
+<li>永远别忘记db 操作的 try catch：个人感觉cassandra 相比posgresql 来讲，出错的概率要大一些，不管是 db的 读还是写。当然，出错概率这也可能与实际应用的数据并发量，cassandra集群规模有关系。</li>
+<li>永远别用关键字in 去查询 partition key，效率低，出错率高</li>
+<li>batch 操作（update，delete，insert）不要用在跨 partition key 的纪录上，详见：<a href="https://docs.datastax.com/en/cql/3.1/cql/cql_using/useBatch.html">https://docs.datastax.com/en/cql/3.1/cql/cql_using/useBatch.html</a></li>
+<li>page query 有时候返回的是一个迭代对象而不是 list，详见上一篇</li>
+<li>cqlengine 的支持还不如cql 本身完善。例如，cqlengine 查询还没有支持关键字“distinct”，而cql 的命令是支持的。</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -621,64 +657,6 @@ def create_app():
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/10/26/qing-song-insert-json-into-database/">轻松insert Json Into Database</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-10-26T23:28:34+08:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:28 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>大懒人时代<br/>
-自从数据库开始支持json后，好多人都迅速爱上了这个数据类型。你要问为毛？答曰这个类型易扩展。。。<br/>
-好吧，过分设计是很讨厌，且不要再次纠结于程序员审美的问题。<br/>
-当你不得不面对插入一个json object的时候，或许能够用得上如下一行代码</p>
-
-<pre><code>json.dumps(object)
-</code></pre>
-
-<p>细细把玩一番，这是int 型hash：</p>
-
-<pre><code>&gt;&gt;&gt; int_dict={1:2}      
-&gt;&gt;&gt; json.dumps(int_dict)
-'{"1": 2}'
-</code></pre>
-
-<p>这个是string型：</p>
-
-<pre><code>&gt;&gt;&gt; str_dict={'1':'2'}
-&gt;&gt;&gt; json.dumps(str_dict)
-'{"1": "2"}'
-</code></pre>
-
-<p>还有这个：</p>
-
-<pre><code>&gt;&gt;&gt; mix_dict={'1':2}
-&gt;&gt;&gt; json.dumps(mix_dict)
-'{"1": 2}'
-</code></pre>
-
-<p>全文结束，哈哈</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -692,6 +670,10 @@ def create_app():
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2016/01/13/cassandra-cha-xun-zhu-yi-er-san-shi/">Cassandra 数据库操作注意二三事</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2015/12/29/cassandra-da-pi-liang-du-cao-zuo/">Cassandra 大批量读操作</a>
@@ -709,10 +691,6 @@ def create_app():
         <a href="/blog/2015/11/25/flask-endpoints-ut-bypass-auth-flask-ut-rao-guo-jian-quan/">Flask Endpoints UT Bypass Auth - Flask UT 绕过鉴权</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2015/11/24/hao-li-yu-qian-li/">毫厘与千里</a>
-      </li>
-    
   </ul>
 </section>
 
@@ -726,7 +704,7 @@ def create_app():
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Allie (Ai Lei) -
+  Copyright &copy; 2016 - Allie (Ai Lei) -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
