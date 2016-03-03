@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://lai-aa.github.io/blog/2016/03/03/cassandra-de-gossip-xie-yi-xue-xi/</loc>
+    <lastmod>2016-03-03T15:49:54+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://lai-aa.github.io/blog/2016/02/16/gong-cheng-shi-zen-yang-cheng-chang/</loc>
     <lastmod>2016-02-16T11:09:16+08:00</lastmod>
   </url>
@@ -105,8 +109,5 @@
   </url>
   <url>
     <loc>http://lai-aa.github.io/blog/categories/cassandra/</loc>
-  </url>
-  <url>
-    <loc>http://lai-aa.github.io/posts/2/</loc>
   </url>
 </urlset>

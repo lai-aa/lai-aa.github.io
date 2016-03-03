@@ -4,7 +4,7 @@
   <title><![CDATA[Keep exploring.]]></title>
   <link href="http://lai-aa.github.io/atom.xml" rel="self"/>
   <link href="http://lai-aa.github.io/"/>
-  <updated>2016-02-16T11:28:22+08:00</updated>
+  <updated>2016-03-03T16:07:49+08:00</updated>
   <id>http://lai-aa.github.io/</id>
   <author>
     <name><![CDATA[Allie (Ai Lei)]]></name>
@@ -12,6 +12,35 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Cassandra 的Gossip 协议学习]]></title>
+    <link href="http://lai-aa.github.io/blog/2016/03/03/cassandra-de-gossip-xie-yi-xue-xi/"/>
+    <updated>2016-03-03T15:49:54+08:00</updated>
+    <id>http://lai-aa.github.io/blog/2016/03/03/cassandra-de-gossip-xie-yi-xue-xi</id>
+    <content type="html"><![CDATA[<p>要了解Cassandra 的Gossip 协议，首先得看一看有关Anti-Entropy 协议的一个paper：
+<a href="https://s3.amazonaws.com/uploads.hipchat.com/94022/1890766/RN11BT8FKmzXtEj/flowgossip.pdf">https://s3.amazonaws.com/uploads.hipchat.com/94022/1890766/RN11BT8FKmzXtEj/flowgossip.pdf</a></p>
+
+<p>如果嫌看洋文费劲，可以参考一下这篇：
+<a href="http://www.cnblogs.com/chen77716/archive/2011/03/24/2130798.html">http://www.cnblogs.com/chen77716/archive/2011/03/24/2130798.html</a></p>
+
+<p>若干关键点：</p>
+
+<ul>
+<li>节点通信方式: push/pull/push-pull 的优劣对比，可以参考 <a href="http://www.cnblogs.com/fxjwind/archive/2013/04/02/2995679.html">http://www.cnblogs.com/fxjwind/archive/2013/04/02/2995679.html</a>   里面更详细的论述</li>
+<li>有关整体协调（Scuttlebutt Reconciliation），大部分都阐述的不是太详细，可以仔细研读一下原论文里面的相关论述和例子。其实主要是两个要点：
+
+<ul>
+<li>两个节点比较所有数据的最大版本号，如果相同，则不更新数据</li>
+<li>如果需要更新数据，首先交换最小版本的数据。</li>
+<li>更多有关 Scuttlebutt Reconcilation 的内容详见 <a href="http://awinterman.github.io/simple-scuttle/">http://awinterman.github.io/simple-scuttle/</a> ，还可以很形象的通过鼠标点击模拟数据交换更新。</li>
+</ul>
+</li>
+<li>有关流控（flow control） 没有过多的学习</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[工程师怎样成长]]></title>

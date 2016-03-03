@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Redis 分布式同步锁设计思路学习 - Keep exploring.</title>
+  <title>Cassandra 的Gossip 协议学习 - Keep exploring.</title>
   <meta name="author" content="Allie (Ai Lei)">
 
   
-  <meta name="description" content="分布式应用开发的过程中经常会遇到同步锁的问题，例如：
-A系统部署在多台应用服务器上，同时，需要在这些服务器上配置一些crontab任务，这些crontab任务要修改数据，所以，仅在某一台服务器运行即可，这种情况下可以使用redis的同步锁机制。 from redlock import &hellip;">
+  <meta name="description" content="要了解Cassandra 的Gossip 协议，首先得看一看有关Anti-Entropy 协议的一个paper：
+https://s3.amazonaws.com/uploads.hipchat.com/94022/1890766/RN11BT8FKmzXtEj/flowgossip.pdf &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@ A系统部署在多台应用服务器上，同时，需要在这些服务器上�
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lai-aa.github.io/blog/2015/09/23/redis-fen-bu-shi-tong-bu-suo-she-ji-si-lu-xue-xi/">
+  <link rel="canonical" href="http://lai-aa.github.io/blog/2016/03/03/cassandra-de-gossip-xie-yi-xue-xi/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Keep exploring." type="application/atom+xml">
@@ -82,7 +82,7 @@ A系统部署在多台应用服务器上，同时，需要在这些服务器上�
   
   <header>
     
-      <h1 class="entry-title">Redis 分布式同步锁设计思路学习</h1>
+      <h1 class="entry-title">Cassandra 的Gossip 协议学习</h1>
     
     
       <p class="meta">
@@ -91,48 +91,34 @@ A系统部署在多台应用服务器上，同时，需要在这些服务器上�
 
 
 
-<time class='entry-date' datetime='2015-09-23T17:31:09+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2015</span></span> <span class='time'>5:31 pm</span></time>
+<time class='entry-date' datetime='2016-03-03T15:49:54+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2016</span></span> <span class='time'>3:49 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>分布式应用开发的过程中经常会遇到同步锁的问题，例如：
-<strong>A系统部署在多台应用服务器上，同时，需要在这些服务器上配置一些crontab任务，这些crontab任务要修改数据，所以，仅在某一台服务器运行即可，这种情况下可以使用redis的同步锁机制。</strong></p>
+<div class="entry-content"><p>要了解Cassandra 的Gossip 协议，首先得看一看有关Anti-Entropy 协议的一个paper：
+<a href="https://s3.amazonaws.com/uploads.hipchat.com/94022/1890766/RN11BT8FKmzXtEj/flowgossip.pdf">https://s3.amazonaws.com/uploads.hipchat.com/94022/1890766/RN11BT8FKmzXtEj/flowgossip.pdf</a></p>
 
-<pre><code>from redlock import Redlock
+<p>如果嫌看洋文费劲，可以参考一下这篇：
+<a href="http://www.cnblogs.com/chen77716/archive/2011/03/24/2130798.html">http://www.cnblogs.com/chen77716/archive/2011/03/24/2130798.html</a></p>
 
-rlm = Redlock([{"host": redis_host, "port": redis_port},])
+<p>若干关键点：</p>
 
-value = r.get(REDIS_KEY)
-if value == 1:
-    my_lock = rlm.lock(REDIS_KEY, 2000)
-    if not my_lock:
-        # Sorry, no permission, Do nothing
-        return
-    r.set(REDIS_KEY, 0)
-    rlm.unlock(my_lock)
-    # I got the permission, Do something
-else:
-    # Sorry, no permission, Do nothing
-    return
-</code></pre>
+<ul>
+<li>节点通信方式: push/pull/push-pull 的优劣对比，可以参考 <a href="http://www.cnblogs.com/fxjwind/archive/2013/04/02/2995679.html">http://www.cnblogs.com/fxjwind/archive/2013/04/02/2995679.html</a>   里面更详细的论述</li>
+<li>有关整体协调（Scuttlebutt Reconciliation），大部分都阐述的不是太详细，可以仔细研读一下原论文里面的相关论述和例子。其实主要是两个要点：
 
-<p>这个用法是比较常见的一种场景，但是redlock背后的同步锁机制还是值得学习一下的，它的设计思路可以参考 <a href="http://redis.io/topics/distlock">Redis Dist Lock</a>,可以看到如果要设计同步锁，需要至少考虑如下方面：
-1. 任何时刻，一个锁只能分配给一个client
-2. 死锁避免：某一个client申请了锁但是crash掉，该锁需要自动释放
-3. 高可用：只要一个Redis 主节点在，client 就能够申请和释放锁</p>
+<ul>
+<li>两个节点比较所有数据的最大版本号，如果相同，则不更新数据</li>
+<li>如果需要更新数据，首先交换最小版本的数据。</li>
+<li>更多有关 Scuttlebutt Reconcilation 的内容详见 <a href="http://awinterman.github.io/simple-scuttle/">http://awinterman.github.io/simple-scuttle/</a> ，还可以很形象的通过鼠标点击模拟数据交换更新。</li>
+</ul>
+</li>
+<li>有关流控（flow control） 没有过多的学习</li>
+</ul>
 
-<h3>尽管redis server 本身有HA 功能，设计同步锁的时候还需要额外考虑HA</h3>
-
-<p>比如，如下场景会引起问题：
-1. Client A 向Redis Master申请锁，成功
-2. Redis Master crash 掉，没有把key传输给Redis Slave
-3. HA 机制将Slave promot 为新Master
-4. Client B 向新的Master 申请和Client A 相同的锁，也会成功！</p>
-
-<p>To Be Continue&hellip;</p>
 </div>
 
 
@@ -148,12 +134,12 @@ else:
 
 
 
-<time class='entry-date' datetime='2015-09-23T17:31:09+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2015</span></span> <span class='time'>5:31 pm</span></time>
+<time class='entry-date' datetime='2016-03-03T15:49:54+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2016</span></span> <span class='time'>3:49 pm</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/design-thinking/'>design-thinking</a>
+    <a class='category' href='/blog/categories/library/'>library</a>
   
 </span>
 
@@ -162,7 +148,7 @@ else:
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lai-aa.github.io/blog/2015/09/23/redis-fen-bu-shi-tong-bu-suo-she-ji-si-lu-xue-xi/" data-via="" data-counturl="http://lai-aa.github.io/blog/2015/09/23/redis-fen-bu-shi-tong-bu-suo-she-ji-si-lu-xue-xi/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lai-aa.github.io/blog/2016/03/03/cassandra-de-gossip-xie-yi-xue-xi/" data-via="" data-counturl="http://lai-aa.github.io/blog/2016/03/03/cassandra-de-gossip-xie-yi-xue-xi/" >Tweet</a>
   
   
   
@@ -171,10 +157,8 @@ else:
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2015/09/23/ce-shi/" title="Previous Post: 测试">&laquo; 测试</a>
+        <a class="basic-alignment left" href="/blog/2016/02/16/gong-cheng-shi-zen-yang-cheng-chang/" title="Previous Post: 工程师怎样成长">&laquo; 工程师怎样成长</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2015/10/09/gong-cheng-shi-ying-gai-you-de-zhi-nian/" title="Next Post: 工程师的执念">工程师的执念 &raquo;</a>
       
     </p>
   </footer>
@@ -240,8 +224,8 @@ else:
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://lai-aa.github.io/blog/2015/09/23/redis-fen-bu-shi-tong-bu-suo-she-ji-si-lu-xue-xi/';
-        var disqus_url = 'http://lai-aa.github.io/blog/2015/09/23/redis-fen-bu-shi-tong-bu-suo-she-ji-si-lu-xue-xi/';
+        var disqus_identifier = 'http://lai-aa.github.io/blog/2016/03/03/cassandra-de-gossip-xie-yi-xue-xi/';
+        var disqus_url = 'http://lai-aa.github.io/blog/2016/03/03/cassandra-de-gossip-xie-yi-xue-xi/';
         var disqus_script = 'embed.js';
       
     (function () {
