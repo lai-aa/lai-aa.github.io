@@ -9,8 +9,8 @@
   <meta name="author" content="Allie (Ai Lei)">
 
   
-  <meta name="description" content="要了解Cassandra 的Gossip 协议，首先得看一看有关Anti-Entropy 协议的一个paper：
-https://s3.amazonaws.com/uploads.hipchat.com/94022/1890766/RN11BT8FKmzXtEj/flowgossip.pdf &hellip;">
+  <meta name="description" content="大部分人在二三十岁上就死去了，因为过了这个年龄，他们只是自己的影子，此后的余生则是在模仿自己中度过，日复一日，更机械，更装腔作势地重复他们在有生之年的所作所为，所思所想，所爱所恨。 ——罗曼·罗兰 《约翰·克利斯朵夫》
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,37 @@ https://s3.amazonaws.com/uploads.hipchat.com/94022/1890766/RN11BT8FKmzXtEj/flowg
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/04/05/du-dian-jing-dian/">读点经典</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-04-05T17:29:51+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>5:29 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>大部分人在二三十岁上就死去了，因为过了这个年龄，他们只是自己的影子，此后的余生则是在模仿自己中度过，日复一日，更机械，更装腔作势地重复他们在有生之年的所作所为，所思所想，所爱所恨。</p>
+
+<p>——罗曼·罗兰 《约翰·克利斯朵夫》</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -586,80 +617,6 @@ def test_auth():
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/23/flask-plus-rq/">Flask + RQ</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-23T17:29:05+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2015</span></span> <span class='time'>5:29 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>1.Create a Queue at Flask App Level:</h3>
-
-<pre><code>import redis
-from rq import Queue
-
-redis_host = settings.get("redis_host")
-redis_port = settings.get("redis_port")
-redis_db = settings.get("redis_db")
-redis_url = "redis://{}:{}/{}".format(redis_host, redis_port, redis_db)
-redis_connection = redis.from_url(redis_url)
-redis_queue = Queue(name="my_queue", connection=redis_connection)
-
-
-...
-def create_app():
-   ...
-   app.q = redis_queue
-...
-</code></pre>
-
-<h3>2. Task Enqueue:</h3>
-
-<pre><code>app.q.enqueue(
-    "os.path.isdir", s="/tmp"
-)
-</code></pre>
-
-<h3>3.Create a exeution client somewhere(setting with burst make this working quit once the queue empty) :</h3>
-
-<pre><code>def _redis_worker(self):
-    redis_host = settings.get("redis_host")
-    redis_port = settings.get("redis_port")
-    redis_db = settings.get("redis_db")
-    redis_url = "redis://{}:{}/{}".format(redis_host, redis_port, redis_db)
-    redis_connection = redis.from_url(redis_url)
-
-    listen=['my_queue']
-    with Connection(redis_connection):
-        worker = Worker(list(map(Queue, listen)))
-        worker.work(burst=True)
-</code></pre>
-
-<h3>Can also run client with command &ldquo;rqworker&rdquo;, run help option for proper settings:</h3>
-
-<pre><code>rqworker --help
-</code></pre>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -675,6 +632,10 @@ def create_app():
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/04/05/du-dian-jing-dian/">读点经典</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/03/03/cassandra-de-gossip-xie-yi-xue-xi/">Cassandra 的Gossip 协议学习</a>
       </li>
     
@@ -688,10 +649,6 @@ def create_app():
     
       <li class="post">
         <a href="/blog/2016/01/13/cassandra-cha-xun-zhu-yi-er-san-shi/">Cassandra 数据库操作注意二三事</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/12/29/cassandra-da-pi-liang-du-cao-zuo/">Cassandra 大批量读操作</a>
       </li>
     
   </ul>
