@@ -4,7 +4,7 @@
   <title><![CDATA[Keep exploring.]]></title>
   <link href="http://lai-aa.github.io/atom.xml" rel="self"/>
   <link href="http://lai-aa.github.io/"/>
-  <updated>2016-04-05T17:42:05+08:00</updated>
+  <updated>2016-04-12T16:53:27+08:00</updated>
   <id>http://lai-aa.github.io/</id>
   <author>
     <name><![CDATA[Allie (Ai Lei)]]></name>
@@ -12,6 +12,42 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[哪种boss值得追随]]></title>
+    <link href="http://lai-aa.github.io/blog/2016/04/12/na-chong-bosszhi-de-zhui-sui/"/>
+    <updated>2016-04-12T16:30:57+08:00</updated>
+    <id>http://lai-aa.github.io/blog/2016/04/12/na-chong-bosszhi-de-zhui-sui</id>
+    <content type="html"><![CDATA[<p>不知道是不是个人的错觉，总觉得在中国，择业的时候，个人选择追随的老板非常重要，有时候，甚至重要程度超过了这个行业本身，或者公司本身。因为大多数时候，人们是为老板干活而不是公司；还有，老板任命重要岗位之前，对canadates权衡技能契合度和喜欢／欣赏程度的时候，往往还是会偏向后者。</p>
+
+<p>那么个人择业的时候，有哪些boss值得考虑呢？个人认为如下：</p>
+
+<p>上上之选：</p>
+
+<ul>
+<li>眼界开阔，人脉广阔者：跟着牛人你也会自动变牛。</li>
+<li>能授权，不猜忌者：大展拳脚的机会。</li>
+<li>有热情，不安现状者：下次他创业说不定会带上你哦，不过风险比较大</li>
+</ul>
+
+
+<p>中等之选：</p>
+
+<ul>
+<li>升迁潜力巨大者：这个毫无疑问会给你带来鸡犬升天的几率，不过只是几率。</li>
+</ul>
+
+
+<p>底线之选：</p>
+
+<ul>
+<li>谦谦君子，温和大气者：混饭吃而已，找个好相处的吧</li>
+</ul>
+
+
+<p>如果以上条件全部不符合，那么只能呵呵了。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[读点经典]]></title>
@@ -590,49 +626,6 @@ Pandas 是一个python库，用来做数据分析用的。简单看了一下，�
 所以，“从谏如流”并不一定是一种好的品德，至少对成熟的工程师来说。保持设计的完整性和审美的一致性非常重要，设想一下那些失败的“中西合璧”的建筑设计吧。<br/>
 还有，给新人提出建议的时候，应该去整体的思考，肯定他风格的部分，不要强行向自己喜好的风格转换。<br/>
 当然，追求完美的设计是每一个工程师应该具备的基本品德。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Redis 分布式同步锁设计思路学习]]></title>
-    <link href="http://lai-aa.github.io/blog/2015/09/23/redis-fen-bu-shi-tong-bu-suo-she-ji-si-lu-xue-xi/"/>
-    <updated>2015-09-23T17:31:09+08:00</updated>
-    <id>http://lai-aa.github.io/blog/2015/09/23/redis-fen-bu-shi-tong-bu-suo-she-ji-si-lu-xue-xi</id>
-    <content type="html"><![CDATA[<p>分布式应用开发的过程中经常会遇到同步锁的问题，例如：
-<strong>A系统部署在多台应用服务器上，同时，需要在这些服务器上配置一些crontab任务，这些crontab任务要修改数据，所以，仅在某一台服务器运行即可，这种情况下可以使用redis的同步锁机制。</strong></p>
-
-<pre><code>from redlock import Redlock
-
-rlm = Redlock([{"host": redis_host, "port": redis_port},])
-
-value = r.get(REDIS_KEY)
-if value == 1:
-    my_lock = rlm.lock(REDIS_KEY, 2000)
-    if not my_lock:
-        # Sorry, no permission, Do nothing
-        return
-    r.set(REDIS_KEY, 0)
-    rlm.unlock(my_lock)
-    # I got the permission, Do something
-else:
-    # Sorry, no permission, Do nothing
-    return
-</code></pre>
-
-<p>这个用法是比较常见的一种场景，但是redlock背后的同步锁机制还是值得学习一下的，它的设计思路可以参考 <a href="http://redis.io/topics/distlock">Redis Dist Lock</a>,可以看到如果要设计同步锁，需要至少考虑如下方面：
-1. 任何时刻，一个锁只能分配给一个client
-2. 死锁避免：某一个client申请了锁但是crash掉，该锁需要自动释放
-3. 高可用：只要一个Redis 主节点在，client 就能够申请和释放锁</p>
-
-<h3>尽管redis server 本身有HA 功能，设计同步锁的时候还需要额外考虑HA</h3>
-
-<p>比如，如下场景会引起问题：
-1. Client A 向Redis Master申请锁，成功
-2. Redis Master crash 掉，没有把key传输给Redis Slave
-3. HA 机制将Slave promot 为新Master
-4. Client B 向新的Master 申请和Client A 相同的锁，也会成功！</p>
-
-<p>To Be Continue&hellip;</p>
 ]]></content>
   </entry>
   
