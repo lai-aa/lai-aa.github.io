@@ -5,13 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>毫厘与千里 - Keep exploring.</title>
+  <title>Python Virtual Env 二三事 - Keep exploring.</title>
   <meta name="author" content="Allie (Ai Lei)">
 
   
-  <meta name="description" content="灵机一动，事情找到了一种全新的方式，彻底颠覆了传统，当然值得庆贺。
-大部分时候，还是按部就班，一点点向理想逼近。
-不要急着颠覆，或许老方法没有彻底糟透。例如： 中国式学校教育：少一点灌输，多一点启发。少一点应试，多一点自主。 反例：学校教育放的太松，会导致走另外一种极端 中国式家庭教育：少一点说教 &hellip;">
+  <meta name="description" content="对python 开发者来讲，搭建virtual environment 是必然的实践。因为python库一是数量比较多，二是版本更新比较快。那么，搭建一个本地隔离的开发库非常有利于库的管理（防止和系统库混淆），也有利于多项目之间的相互隔离（一个项目的库不会污染全局库）。同时， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://lai-aa.github.io/blog/2015/11/24/hao-li-yu-qian-li/">
+  <link rel="canonical" href="http://lai-aa.github.io/blog/2016/04/14/python-virtual-env-er-san-shi/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Keep exploring." type="application/atom+xml">
@@ -83,7 +81,7 @@
   
   <header>
     
-      <h1 class="entry-title">毫厘与千里</h1>
+      <h1 class="entry-title">Python Virtual Env 二三事</h1>
     
     
       <p class="meta">
@@ -92,34 +90,42 @@
 
 
 
-<time class='entry-date' datetime='2015-11-24T17:30:23+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>5:30 pm</span></time>
+<time class='entry-date' datetime='2016-04-14T15:18:25+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>3:18 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>灵机一动，事情找到了一种全新的方式，彻底颠覆了传统，当然值得庆贺。<br/>
-大部分时候，还是按部就班，一点点向理想逼近。<br/>
-不要急着颠覆，或许老方法没有彻底糟透。例如：</p>
+<div class="entry-content"><p>对python 开发者来讲，搭建virtual environment 是必然的实践。因为python库一是数量比较多，二是版本更新比较快。那么，搭建一个本地隔离的开发库非常有利于库的管理（防止和系统库混淆），也有利于多项目之间的相互隔离（一个项目的库不会污染全局库）。同时，这种隔离的库环境比较容易保证开发，测试，和生产环境使用同样的环境。基于以上的需要，python 的virtual environment 就应用而生了。</p>
 
-<ul>
-<li><p>中国式学校教育：少一点灌输，多一点启发。少一点应试，多一点自主。</p>
+<h3>安装</h3>
 
-<ul>
-<li>反例：学校教育放的太松，会导致走另外一种极端</li>
-</ul>
-</li>
-<li><p>中国式家庭教育：少一点说教，多一点亲身示范。少一点急功近利，多一点顺其自然。</p>
+<p>python 2.x: <br/>
+    pip install virtualenv<br/>
+python 3.x: 安装好python后自带了模块 venv 和 工具pyvenv，停供类似virtualenv 的使用方法</p>
 
-<ul>
-<li>反例：家庭的彻底放任和疏于管教</li>
-</ul>
-</li>
-</ul>
+<h3>使用</h3>
 
+<p>具体使用方法可以查看文档</p>
 
-<p>工程师的自我修养提升，何尝不是如此呢？多一点坚持，多一点循序渐进。少一点浮躁，少一点名目繁多。</p>
+<h3>virtualenvwrapper</h3>
+
+<p>如果你有多个项目需要同时开发，那么需要一个有效的工具去在这些virtual env 之间进行切换，这是好virtualenvwrapper 便产生了。这款工具可以方便的在这些项目之间来回切换，自动加载相关开发设置。</p>
+
+<h3>pyenv</h3>
+
+<p>值得注意的是，pyvenv 是仅仅支持一个python 版本且限定于 3.x，那么该如何指定python 版本呢？ pyenv 你值得拥有，看名字就能猜到这个工具大概是效仿 renv 的。</p>
+
+<h3>venv-update</h3>
+
+<p>对于更多的virtual environment 的需求：
+超大型项目需要维护一系列的 requirements，那么仅仅依靠virtual environment 很难满足类似requirement 库的维护：例如删除多余的库，校验库的完整性，自动升级库版本到指定的版本。。。这个时候你可以参考 Yelp 公司的一个开源项目 venv-update，该项目提供了对依赖库的管理工具 venv-update 以及依赖库的快速安装工具 pip-faster 可以助你一臂之力。</p>
+
+<h3>参考文档：</h3>
+
+<p><a href="https://realpython.com/blog/python/python-virtual-environments-a-primer/">https://realpython.com/blog/python/python-virtual-environments-a-primer/</a><br/>
+<a href="http://venv-update.readthedocs.org/en/stable/">http://venv-update.readthedocs.org/en/stable/</a></p>
 </div>
 
 
@@ -135,12 +141,12 @@
 
 
 
-<time class='entry-date' datetime='2015-11-24T17:30:23+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>5:30 pm</span></time>
+<time class='entry-date' datetime='2016-04-14T15:18:25+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>3:18 pm</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/life-thinking/'>life-thinking</a>
+    <a class='category' href='/blog/categories/library/'>library</a>
   
 </span>
 
@@ -149,7 +155,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lai-aa.github.io/blog/2015/11/24/hao-li-yu-qian-li/" data-via="" data-counturl="http://lai-aa.github.io/blog/2015/11/24/hao-li-yu-qian-li/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://lai-aa.github.io/blog/2016/04/14/python-virtual-env-er-san-shi/" data-via="" data-counturl="http://lai-aa.github.io/blog/2016/04/14/python-virtual-env-er-san-shi/" >Tweet</a>
   
   
   
@@ -158,10 +164,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2015/11/23/flask-plus-rq/" title="Previous Post: Flask + RQ">&laquo; Flask + RQ</a>
+        <a class="basic-alignment left" href="/blog/2016/04/12/na-chong-bosszhi-de-zhui-sui/" title="Previous Post: 哪种boss值得追随">&laquo; 哪种boss值得追随</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2015/11/25/flask-endpoints-ut-bypass-auth-flask-ut-rao-guo-jian-quan/" title="Next Post: Flask Endpoints UT bypass Auth - Flask UT 绕过鉴权">Flask Endpoints UT bypass Auth - Flask UT 绕过鉴权 &raquo;</a>
       
     </p>
   </footer>
@@ -227,8 +231,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://lai-aa.github.io/blog/2015/11/24/hao-li-yu-qian-li/';
-        var disqus_url = 'http://lai-aa.github.io/blog/2015/11/24/hao-li-yu-qian-li/';
+        var disqus_identifier = 'http://lai-aa.github.io/blog/2016/04/14/python-virtual-env-er-san-shi/';
+        var disqus_url = 'http://lai-aa.github.io/blog/2016/04/14/python-virtual-env-er-san-shi/';
         var disqus_script = 'embed.js';
       
     (function () {

@@ -9,7 +9,7 @@
   <meta name="author" content="Allie (Ai Lei)">
 
   
-  <meta name="description" content="不知道是不是个人的错觉，总觉得在中国，择业的时候，个人选择追随的老板非常重要，有时候，甚至重要程度超过了这个行业本身，或者公司本身。因为大多数时候，人们是为老板干活而不是公司；还有，老板任命重要岗位之前，对canadates权衡技能契合度和喜欢／欣赏程度的时候，往往还是会偏向后者。 &hellip;">
+  <meta name="description" content="对python 开发者来讲，搭建virtual environment 是必然的实践。因为python库一是数量比较多，二是版本更新比较快。那么，搭建一个本地隔离的开发库非常有利于库的管理（防止和系统库混淆），也有利于多项目之间的相互隔离（一个项目的库不会污染全局库）。同时， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,63 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2016/04/14/python-virtual-env-er-san-shi/">Python Virtual Env 二三事</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-04-14T15:18:25+08:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>3:18 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>对python 开发者来讲，搭建virtual environment 是必然的实践。因为python库一是数量比较多，二是版本更新比较快。那么，搭建一个本地隔离的开发库非常有利于库的管理（防止和系统库混淆），也有利于多项目之间的相互隔离（一个项目的库不会污染全局库）。同时，这种隔离的库环境比较容易保证开发，测试，和生产环境使用同样的环境。基于以上的需要，python 的virtual environment 就应用而生了。</p>
+
+<h3>安装</h3>
+
+<p>python 2.x: <br/>
+    pip install virtualenv<br/>
+python 3.x: 安装好python后自带了模块 venv 和 工具pyvenv，停供类似virtualenv 的使用方法</p>
+
+<h3>使用</h3>
+
+<p>具体使用方法可以查看文档</p>
+
+<h3>virtualenvwrapper</h3>
+
+<p>如果你有多个项目需要同时开发，那么需要一个有效的工具去在这些virtual env 之间进行切换，这是好virtualenvwrapper 便产生了。这款工具可以方便的在这些项目之间来回切换，自动加载相关开发设置。</p>
+
+<h3>pyenv</h3>
+
+<p>值得注意的是，pyvenv 是仅仅支持一个python 版本且限定于 3.x，那么该如何指定python 版本呢？ pyenv 你值得拥有，看名字就能猜到这个工具大概是效仿 renv 的。</p>
+
+<h3>venv-update</h3>
+
+<p>对于更多的virtual environment 的需求：
+超大型项目需要维护一系列的 requirements，那么仅仅依靠virtual environment 很难满足类似requirement 库的维护：例如删除多余的库，校验库的完整性，自动升级库版本到指定的版本。。。这个时候你可以参考 Yelp 公司的一个开源项目 venv-update，该项目提供了对依赖库的管理工具 venv-update 以及依赖库的快速安装工具 pip-faster 可以助你一臂之力。</p>
+
+<h3>参考文档：</h3>
+
+<p><a href="https://realpython.com/blog/python/python-virtual-environments-a-primer/">https://realpython.com/blog/python/python-virtual-environments-a-primer/</a><br/>
+<a href="http://venv-update.readthedocs.org/en/stable/">http://venv-update.readthedocs.org/en/stable/</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -521,112 +578,6 @@ cluster key = k_clust_one, k_clust_two, k_clust_three</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/11/25/flask-endpoints-ut-bypass-auth-flask-ut-rao-guo-jian-quan/">Flask Endpoints UT Bypass Auth - Flask UT 绕过鉴权</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-11-25T11:43:38+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:43 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>大部分Flask 应用的 Endpoint 都有Auth认证，用来保护应用的安全。那么单元测试的时候改如何绕过这些设置，专注于功能性的测试呢？</p>
-
-<h2>对于 @login_required 保护的Endpoint：</h2>
-
-<pre><code>@example.route("/funny", methods=["GET"])
-@login_required
-def get_funny():
-    ...
-</code></pre>
-
-<p>在 conftest.py 里面设置一下测试用APP的配置即可，_login_disabled 可以忽略鉴权：</p>
-
-<pre><code>@pytest.yield_fixture(scope='function')
-def app_example():
-    _app = example.create_app()
-    _app.config['TESTING'] = True
-    _app.login_manager.init_app(_app)
-    _app.login_manager._login_disabled = True
-
-    ctx = _app.test_request_context()
-    ctx.push()
-
-    yield _app
-
-    ctx.pop()
-</code></pre>
-
-<p>然后再测试case 里面加上:</p>
-
-<pre><code>@pytest.mark.usefixtures('app_example')
-def test_auth(self):
-    client = app_example.test_client()
-    client.post(".....")
-    assert ...
-</code></pre>
-
-<h2>对于 flask_principal 保护的Endpoint:</h2>
-
-<pre><code>from flask.ext.principal import (Permission, RoleNeed)
-permission = Permission(RoleNeed('role_string_definition'))
-...
-
-@permission.require(http_exception=401)
-def get_funny():
-    ...
-</code></pre>
-
-<p>在 conftest.py 里面设置 principal 相关的 mock：</p>
-
-<pre><code>@pytest.yield_fixture(scope="function")
-def principal():
-    mock_principal = mock.patch('flask.ext.principal.IdentityContext.can', return_value=True)
-    mock_principal.start()
-    yield mock_principal
-    #mock_principal.stop()
-
-
-@pytest.yield_fixture(scope="function")
-def identify():
-    mock_identify = mock.patch('flask.ext.principal.Identity.can', return_value=True)
-    mock_identify.start()
-    yield mock_identify
-
-
-@pytest.yield_fixture(scope="function")
-def permission():
-    mock_permission = mock.patch('flask.ext.principal.Permission.can', return_value=True)
-    mock_permission.start()
-    yield mock_permission
-</code></pre>
-
-<p>然后在测试的case里面加上这些修饰符就好了：</p>
-
-<pre><code>@pytest.mark.usefixtures('principal', 'identify', 'permission')
-def test_auth():
-</code></pre>
-
-<p>总的来说，其实就是moke 库的作用 :)</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -642,6 +593,10 @@ def test_auth():
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/04/14/python-virtual-env-er-san-shi/">Python Virtual Env 二三事</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/04/12/na-chong-bosszhi-de-zhui-sui/">哪种boss值得追随</a>
       </li>
     
@@ -655,10 +610,6 @@ def test_auth():
     
       <li class="post">
         <a href="/blog/2016/02/16/gong-cheng-shi-zen-yang-cheng-chang/">工程师怎样成长</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2016/02/16/ri-san-sheng-wu-shen/">日三省吾身</a>
       </li>
     
   </ul>

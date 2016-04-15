@@ -9,9 +9,8 @@
   <meta name="author" content="Allie (Ai Lei)">
 
   
-  <meta name="description" content="灵机一动，事情找到了一种全新的方式，彻底颠覆了传统，当然值得庆贺。
-大部分时候，还是按部就班，一点点向理想逼近。
-不要急着颠覆，或许老方法没有彻底糟透。例如： 中国式学校教育：少一点灌输，多一点启发。少一点应试，多一点自主。 反例：学校教育放的太松，会导致走另外一种极端 中国式家庭教育：少一点说教 &hellip;">
+  <meta name="description" content="大部分Flask 应用的 Endpoint 都有Auth认证，用来保护应用的安全。那么单元测试的时候改如何绕过这些设置，专注于功能性的测试呢？ 对于 @login_required 保护的Endpoint： @example.route("/funny", methods=["GET"])
+@ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -80,6 +79,112 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/11/25/flask-endpoints-ut-bypass-auth-flask-ut-rao-guo-jian-quan/">Flask Endpoints UT Bypass Auth - Flask UT 绕过鉴权</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-11-25T11:43:38+08:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:43 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>大部分Flask 应用的 Endpoint 都有Auth认证，用来保护应用的安全。那么单元测试的时候改如何绕过这些设置，专注于功能性的测试呢？</p>
+
+<h2>对于 @login_required 保护的Endpoint：</h2>
+
+<pre><code>@example.route("/funny", methods=["GET"])
+@login_required
+def get_funny():
+    ...
+</code></pre>
+
+<p>在 conftest.py 里面设置一下测试用APP的配置即可，_login_disabled 可以忽略鉴权：</p>
+
+<pre><code>@pytest.yield_fixture(scope='function')
+def app_example():
+    _app = example.create_app()
+    _app.config['TESTING'] = True
+    _app.login_manager.init_app(_app)
+    _app.login_manager._login_disabled = True
+
+    ctx = _app.test_request_context()
+    ctx.push()
+
+    yield _app
+
+    ctx.pop()
+</code></pre>
+
+<p>然后再测试case 里面加上:</p>
+
+<pre><code>@pytest.mark.usefixtures('app_example')
+def test_auth(self):
+    client = app_example.test_client()
+    client.post(".....")
+    assert ...
+</code></pre>
+
+<h2>对于 flask_principal 保护的Endpoint:</h2>
+
+<pre><code>from flask.ext.principal import (Permission, RoleNeed)
+permission = Permission(RoleNeed('role_string_definition'))
+...
+
+@permission.require(http_exception=401)
+def get_funny():
+    ...
+</code></pre>
+
+<p>在 conftest.py 里面设置 principal 相关的 mock：</p>
+
+<pre><code>@pytest.yield_fixture(scope="function")
+def principal():
+    mock_principal = mock.patch('flask.ext.principal.IdentityContext.can', return_value=True)
+    mock_principal.start()
+    yield mock_principal
+    #mock_principal.stop()
+
+
+@pytest.yield_fixture(scope="function")
+def identify():
+    mock_identify = mock.patch('flask.ext.principal.Identity.can', return_value=True)
+    mock_identify.start()
+    yield mock_identify
+
+
+@pytest.yield_fixture(scope="function")
+def permission():
+    mock_permission = mock.patch('flask.ext.principal.Permission.can', return_value=True)
+    mock_permission.start()
+    yield mock_permission
+</code></pre>
+
+<p>然后在测试的case里面加上这些修饰符就好了：</p>
+
+<pre><code>@pytest.mark.usefixtures('principal', 'identify', 'permission')
+def test_auth():
+</code></pre>
+
+<p>总的来说，其实就是moke 库的作用 :)</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -516,39 +621,6 @@ Pandas 是一个python库，用来做数据分析用的。简单看了一下，�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/10/09/gong-cheng-shi-ying-gai-you-de-zhi-nian/">工程师的执念</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-10-09T17:51:39+08:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>5:51 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>当工程师在做设计的时候，这个设计应该是完整的，各个细节和他的审美情趣一致的。<br/>
-所以大多数成熟的工程师，在工作中会体现的像一个“暴君”。如果你对他的设计细节的地方吹毛求疵，会大大的得罪他。因为，在他看来，对于同样的功能，会有很多不同的设计，这些设计都能很好的实现这个功能。 <br/>
-所以，“从谏如流”并不一定是一种好的品德，至少对成熟的工程师来说。保持设计的完整性和审美的一致性非常重要，设想一下那些失败的“中西合璧”的建筑设计吧。<br/>
-还有，给新人提出建议的时候，应该去整体的思考，肯定他风格的部分，不要强行向自己喜好的风格转换。<br/>
-当然，追求完美的设计是每一个工程师应该具备的基本品德。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/3">&larr; Older</a>
@@ -566,6 +638,10 @@ Pandas 是一个python库，用来做数据分析用的。简单看了一下，�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2016/04/14/python-virtual-env-er-san-shi/">Python Virtual Env 二三事</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2016/04/12/na-chong-bosszhi-de-zhui-sui/">哪种boss值得追随</a>
       </li>
     
@@ -579,10 +655,6 @@ Pandas 是一个python库，用来做数据分析用的。简单看了一下，�
     
       <li class="post">
         <a href="/blog/2016/02/16/gong-cheng-shi-zen-yang-cheng-chang/">工程师怎样成长</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2016/02/16/ri-san-sheng-wu-shen/">日三省吾身</a>
       </li>
     
   </ul>

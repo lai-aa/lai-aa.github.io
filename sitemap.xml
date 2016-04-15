@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://lai-aa.github.io/blog/2016/04/14/python-virtual-env-er-san-shi/</loc>
+    <lastmod>2016-04-14T15:18:25+08:00</lastmod>
+  </url>
+  <url>
     <loc>http://lai-aa.github.io/blog/2016/04/12/na-chong-bosszhi-de-zhui-sui/</loc>
     <lastmod>2016-04-12T16:30:57+08:00</lastmod>
   </url>
